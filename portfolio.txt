@@ -1,0 +1,33 @@
+HOME 
+-description: Keep track of your dashboard and update your database for any new updates.
+
+CRUD
+-client
+-education
+-explore
+-Navigations
+-projects
+-services
+-skills
+
+
+LAYOUT
+-overview
+-view
+-create
+-client
+
+
+SKILLS		
+Main
+-Frontend ->react=90
+	  ->flutter=85
+-Backend  ->spring=70
+	  ->laravel=75
+-DBMS	  ->postgressql=85
+	  ->mysql=85
+-Miscellaneous
+	  ->docker=80
+	  ->scrum=95
+	  ->designing=75
+
