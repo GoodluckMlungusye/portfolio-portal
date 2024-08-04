@@ -4,8 +4,6 @@ import merge from 'lodash/merge';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeOptions, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
-import { useLocales } from 'src/locales';
-
 import { useSettingsContext } from 'src/components/settings';
 
 // system
@@ -26,8 +24,6 @@ type Props = {
 };
 
 export default function ThemeProvider({ children }: Props) {
-  const { currentLang } = useLocales();
-
   const settings = useSettingsContext();
 
   const presets = createPresets(settings.themeColorPresets);
@@ -63,13 +59,8 @@ export default function ThemeProvider({ children }: Props) {
 
   theme.components = merge(componentsOverrides(theme), contrast.components);
 
-  const themeWithLocale = useMemo(
-    () => createTheme(theme, currentLang.systemValue),
-    [currentLang.systemValue, theme]
-  );
-
   return (
-    <MuiThemeProvider theme={themeWithLocale}>
+    <MuiThemeProvider theme={theme}>
       <RTL themeDirection={settings.themeDirection}>
         <CssBaseline />
         {children}

@@ -17,8 +17,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { IUserItem } from 'src/types/user';
 
-import UserQuickEditForm from './user-quick-edit-form';
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -97,8 +95,6 @@ export default function UserTableRow({
           </IconButton>
         </TableCell>
       </TableRow>
-
-      <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
 
       <CustomPopover
         open={popover.open}

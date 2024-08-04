@@ -1,8 +1,8 @@
 {
-  "name": "@minimal-kit/vite-ts",
-  "author": "Minimals",
+  "name": "portfolio",
+  "author": "Goodam",
   "version": "5.7.0",
-  "description": "Vite & TypeScript",
+  "description": "Portfolio CRUD operations",
   "private": true,
   "type": "module",
   "scripts": {
@@ -38,6 +38,7 @@
     "@mui/system": "^5.14.20",
     "@mui/x-data-grid": "^6.18.4",
     "@mui/x-date-pickers": "^6.18.4",
+    "@popperjs/core": "^2.11.8",
     "@react-pdf/renderer": "^3.1.14",
     "@supabase/supabase-js": "^2.39.0",
     "apexcharts": "^3.44.2",

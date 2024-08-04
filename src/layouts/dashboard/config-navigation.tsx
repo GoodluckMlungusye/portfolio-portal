@@ -4,7 +4,6 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import Label from 'src/components/label';
 import SvgColor from 'src/components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -60,7 +59,7 @@ export function useNavData() {
             title: t('dashboard'),
             path: paths.dashboard.root,
             icon: ICONS.dashboard,
-          }
+          },
         ],
       },
 
@@ -84,7 +83,7 @@ export function useNavData() {
           },
           {
             title: t('create'),
-            path: paths.dashboard.user.root,
+            path: paths.dashboard.product.root,
             icon: ICONS.banking,
             children: [
               { title: t('projects'), path: paths.dashboard.product.new },
@@ -94,31 +93,9 @@ export function useNavData() {
               { title: t('services'), path: paths.dashboard.product.new },
               { title: t('navigations'), path: paths.dashboard.product.new },
             ],
-          }
+          },
         ],
       },
-
-      // CLIENTS
-      // ----------------------------------------------------------------------
-      {
-        subheader: t('clients'),
-        items: [
-          // MAIL
-          {
-            title: t('mail'),
-            path: paths.dashboard.mail,
-            icon: ICONS.mail,
-            info: <Label color="error">+32</Label>,
-          },
-
-          // CHAT
-          {
-            title: t('chat'),
-            path: paths.dashboard.chat,
-            icon: ICONS.chat,
-          }
-        ]
-      }
     ],
     [t]
   );
