@@ -32,7 +32,6 @@ import {
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSelect,
-  RHFEditor,
   RHFUpload,
   RHFSwitch,
   RHFTextField,
@@ -194,11 +193,6 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             <RHFTextField name="name" label="Product Name" />
 
             <RHFTextField name="subDescription" label="Sub Description" multiline rows={4} />
-
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Content</Typography>
-              <RHFEditor simple name="description" />
-            </Stack>
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>

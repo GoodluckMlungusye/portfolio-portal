@@ -9,11 +9,7 @@ import SvgColor from 'src/components/svg-color';
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
-  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-  // OR
-  // <Iconify icon="fluent:mail-24-filled" />
-  // https://icon-sets.iconify.design/solar/
-  // https://www.streamlinehq.com/icons
+  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }}/>
 );
 
 const ICONS = {
@@ -71,7 +67,7 @@ export function useNavData() {
           {
             title: t('view'),
             path: paths.dashboard.user.root,
-            icon: ICONS.analytics,
+            icon: ICONS.file,
             children: [
               { title: t('projects'), path: paths.dashboard.user.list },
               { title: t('skills'), path: paths.dashboard.user.list },

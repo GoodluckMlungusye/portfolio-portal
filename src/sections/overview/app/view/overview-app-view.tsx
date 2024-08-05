@@ -5,13 +5,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
-import {_appFeatured} from 'src/_mock';
 import { SeoIllustration } from 'src/assets/illustrations';
 
 import { useSettingsContext } from 'src/components/settings';
 
 import AppWelcome from '../app-welcome';
-import AppFeatured from '../app-featured';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import EcommerceYearlySales from '../../e-commerce/ecommerce-yearly-sales';
@@ -28,7 +26,7 @@ export default function OverviewAppView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12}>
           <AppWelcome
             title={`Welcome back 👋 \n ${user?.displayName}`}
             description="Keep track of your dashboard and update your database for any new updates."
@@ -39,10 +37,6 @@ export default function OverviewAppView() {
               </Button>
             }
           />
-        </Grid>
-
-        <Grid xs={12} md={4}>
-          <AppFeatured list={_appFeatured} />
         </Grid>
 
         <Grid xs={12} md={4}>
@@ -104,7 +98,7 @@ export default function OverviewAppView() {
                   'Flutter',
                   'Spring',
                   'Laravel',
-                  'PostgresSQL',
+                  'Postgres',
                   'MySQL',
                   'Docker',
                   'Scrum',
@@ -143,7 +137,7 @@ export default function OverviewAppView() {
                     year: 'DBMS',
                     data: [
                       {
-                        name: 'PostgresSQL',
+                        name: 'Postgres',
                         data: [0, 0, 0, 0, 0, 85, 0, 0, 0, 0, 0],
                       },
                       {
@@ -169,7 +163,7 @@ export default function OverviewAppView() {
                         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0],
                       }
                     ],
-                  },
+                  }
                 ],
               }}
             />
