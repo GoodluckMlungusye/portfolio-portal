@@ -12,9 +12,7 @@ const IndexPage = lazy(() => import("src/pages/dashboard/overview/app"));
 const ProductCreatePage = lazy(() =>
   import("src/pages/dashboard/management/new")
 );
-const UserProfilePage = lazy(() => import("src/pages/dashboard/user/profile"));
 const UserListPage = lazy(() => import("src/pages/dashboard/management/list"));
-const UserEditPage = lazy(() => import("src/pages/dashboard/user/edit"));
 const ProductEditPage = lazy(() =>
   import("src/pages/dashboard/management/edit")
 );
@@ -35,11 +33,7 @@ export const dashboardRoutes = [
       { element: <IndexPage />, index: true },
       {
         path: "user",
-        children: [
-          { element: <UserProfilePage />, index: true },
-          { path: "list/:index", element: <UserListPage /> },
-          { path: ":id/edit", element: <UserEditPage /> },
-        ],
+        children: [{ path: "list/:index", element: <UserListPage /> }],
       },
       {
         path: "product",
