@@ -1,31 +1,57 @@
-import Container from '@mui/material/Container';
+import { useMemo, useState, useEffect } from "react";
 
-import { paths } from 'src/routes/paths';
+import Container from "@mui/material/Container";
 
-import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { paths } from "src/routes/paths";
 
-import ProductNewEditForm from '../product-new-edit-form';
+import { useSettingsContext } from "src/components/settings";
+import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
+
+import ProductNewEditForm from "../product-new-edit-form";
 
 // ----------------------------------------------------------------------
 
-export default function ProductCreateView() {
+type Props = {
+  index: string;
+};
+
+export default function ProductCreateView({ index }: Props) {
+  const [dashboardTitle, setDashboardTitle] = useState("");
+
+  const managementList = useMemo(
+    () => [
+      { title: "Projects", id: 1 },
+      { title: "Skills", id: 2 },
+      { title: "Education", id: 3 },
+      { title: "Explore", id: 4 },
+      { title: "Services", id: 5 },
+      { title: "Navigations", id: 6 },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    const foundItem = managementList.find((item) => item.id === Number(index));
+    if (foundItem) {
+      setDashboardTitle(foundItem.title);
+    }
+  }, [index, managementList]);
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : "lg"}>
       <CustomBreadcrumbs
-        heading="Create a new product"
+        heading={`Create new ${dashboardTitle}`}
         links={[
           {
-            name: 'Dashboard',
+            name: "Dashboard",
             href: paths.dashboard.root,
           },
           {
-            name: 'Product',
+            name: dashboardTitle,
             href: paths.dashboard.product.root,
           },
-          { name: 'New product' },
+          { name: "Create" },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

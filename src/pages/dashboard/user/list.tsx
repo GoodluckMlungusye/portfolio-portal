@@ -1,17 +1,22 @@
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 
-import { UserListView } from 'src/sections/user/view';
+import { useParams } from "src/routes/hooks";
+
+import { UserListView } from "src/sections/user/view";
 
 // ----------------------------------------------------------------------
 
 export default function UserListPage() {
+  const params = useParams();
+
+  const { index } = params;
   return (
     <>
       <Helmet>
-        <title> Dashboard: User List</title>
+        <title> Management: List</title>
       </Helmet>
 
-      <UserListView />
+      <UserListView index={`${index}`} />
     </>
   );
 }

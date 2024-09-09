@@ -1,42 +1,45 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { paths } from 'src/routes/paths';
+import { paths } from "src/routes/paths";
 
-import { useTranslate } from 'src/locales';
+import { useTranslate } from "src/locales";
 
-import SvgColor from 'src/components/svg-color';
+import SvgColor from "src/components/svg-color";
 
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
-  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }}/>
+  <SvgColor
+    src={`/assets/icons/navbar/${name}.svg`}
+    sx={{ width: 1, height: 1 }}
+  />
 );
 
 const ICONS = {
-  job: icon('ic_job'),
-  blog: icon('ic_blog'),
-  chat: icon('ic_chat'),
-  mail: icon('ic_mail'),
-  user: icon('ic_user'),
-  file: icon('ic_file'),
-  lock: icon('ic_lock'),
-  tour: icon('ic_tour'),
-  order: icon('ic_order'),
-  label: icon('ic_label'),
-  blank: icon('ic_blank'),
-  kanban: icon('ic_kanban'),
-  folder: icon('ic_folder'),
-  banking: icon('ic_banking'),
-  booking: icon('ic_booking'),
-  invoice: icon('ic_invoice'),
-  product: icon('ic_product'),
-  calendar: icon('ic_calendar'),
-  disabled: icon('ic_disabled'),
-  external: icon('ic_external'),
-  menuItem: icon('ic_menu_item'),
-  ecommerce: icon('ic_ecommerce'),
-  analytics: icon('ic_analytics'),
-  dashboard: icon('ic_dashboard'),
+  job: icon("ic_job"),
+  blog: icon("ic_blog"),
+  chat: icon("ic_chat"),
+  mail: icon("ic_mail"),
+  user: icon("ic_user"),
+  file: icon("ic_file"),
+  lock: icon("ic_lock"),
+  tour: icon("ic_tour"),
+  order: icon("ic_order"),
+  label: icon("ic_label"),
+  blank: icon("ic_blank"),
+  kanban: icon("ic_kanban"),
+  folder: icon("ic_folder"),
+  banking: icon("ic_banking"),
+  booking: icon("ic_booking"),
+  invoice: icon("ic_invoice"),
+  product: icon("ic_product"),
+  calendar: icon("ic_calendar"),
+  disabled: icon("ic_disabled"),
+  external: icon("ic_external"),
+  menuItem: icon("ic_menu_item"),
+  ecommerce: icon("ic_ecommerce"),
+  analytics: icon("ic_analytics"),
+  dashboard: icon("ic_dashboard"),
 };
 
 // ----------------------------------------------------------------------
@@ -44,15 +47,27 @@ const ICONS = {
 export function useNavData() {
   const { t } = useTranslate();
 
+  const managementList = useMemo(
+    () => [
+      { title: "projects", id: 1 },
+      { title: "skills", id: 2 },
+      { title: "education", id: 3 },
+      { title: "explore", id: 4 },
+      { title: "services", id: 5 },
+      { title: "navigations", id: 6 },
+    ],
+    []
+  );
+
   const data = useMemo(
     () => [
       // OVERVIEW
       // ----------------------------------------------------------------------
       {
-        subheader: t('overview'),
+        subheader: t("overview"),
         items: [
           {
-            title: t('dashboard'),
+            title: t("dashboard"),
             path: paths.dashboard.root,
             icon: ICONS.dashboard,
           },
@@ -62,38 +77,30 @@ export function useNavData() {
       // MANAGEMENT
       // ----------------------------------------------------------------------
       {
-        subheader: t('management'),
+        subheader: t("management"),
         items: [
           {
-            title: t('view'),
+            title: t("list"),
             path: paths.dashboard.user.root,
             icon: ICONS.file,
-            children: [
-              { title: t('projects'), path: paths.dashboard.user.list },
-              { title: t('skills'), path: paths.dashboard.user.list },
-              { title: t('education'), path: paths.dashboard.user.list },
-              { title: t('explore'), path: paths.dashboard.user.list },
-              { title: t('services'), path: paths.dashboard.user.list },
-              { title: t('navigations'), path: paths.dashboard.user.list },
-            ],
+            children: managementList.map((item) => ({
+              title: t(item.title),
+              path: `${paths.dashboard.user.list}/${item.id}`,
+            })),
           },
           {
-            title: t('create'),
+            title: t("create"),
             path: paths.dashboard.product.root,
             icon: ICONS.banking,
-            children: [
-              { title: t('projects'), path: paths.dashboard.product.new },
-              { title: t('skills'), path: paths.dashboard.product.new },
-              { title: t('education'), path: paths.dashboard.product.new },
-              { title: t('explore'), path: paths.dashboard.product.new },
-              { title: t('services'), path: paths.dashboard.product.new },
-              { title: t('navigations'), path: paths.dashboard.product.new },
-            ],
+            children: managementList.map((item) => ({
+              title: t(item.title),
+              path: `${paths.dashboard.product.new}/${item.id}`,
+            })),
           },
         ],
       },
     ],
-    [t]
+    [t, managementList]
   );
 
   return data;
