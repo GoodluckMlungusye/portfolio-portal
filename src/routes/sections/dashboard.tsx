@@ -8,13 +8,16 @@ import { LoadingScreen } from "src/components/loading-screen";
 
 // ----------------------------------------------------------------------
 
-const IndexPage = lazy(() => import("src/pages/dashboard/app"));
-const ProductListPage = lazy(() => import("src/pages/dashboard/product/list"));
-const ProductCreatePage = lazy(() => import("src/pages/dashboard/product/new"));
+const IndexPage = lazy(() => import("src/pages/dashboard/overview/app"));
+const ProductCreatePage = lazy(() =>
+  import("src/pages/dashboard/management/new")
+);
 const UserProfilePage = lazy(() => import("src/pages/dashboard/user/profile"));
-const UserListPage = lazy(() => import("src/pages/dashboard/user/list"));
+const UserListPage = lazy(() => import("src/pages/dashboard/management/list"));
 const UserEditPage = lazy(() => import("src/pages/dashboard/user/edit"));
-const ProductEditPage = lazy(() => import("src/pages/dashboard/product/edit"));
+const ProductEditPage = lazy(() =>
+  import("src/pages/dashboard/management/edit")
+);
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +44,6 @@ export const dashboardRoutes = [
       {
         path: "product",
         children: [
-          { element: <ProductListPage />, index: true },
           { path: "new/:index", element: <ProductCreatePage /> },
           { path: ":id/edit", element: <ProductEditPage /> },
         ],

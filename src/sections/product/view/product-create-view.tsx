@@ -49,7 +49,6 @@ export default function ProductCreateView({ index }: Props) {
           },
           {
             name: dashboardTitle,
-            href: paths.dashboard.product.root,
           },
           { name: "Create" },
         ]}

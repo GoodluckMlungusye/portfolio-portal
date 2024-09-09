@@ -180,7 +180,7 @@ export default function UserListView({ index }: Props) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      router.push(paths.dashboard.product.edit(id));
     },
     [router]
   );
@@ -199,7 +199,7 @@ export default function UserListView({ index }: Props) {
           heading="List"
           links={[
             { name: "Dashboard", href: paths.dashboard.root },
-            { name: dashboardTitle, href: paths.dashboard.user.root },
+            { name: dashboardTitle },
             { name: "List" },
           ]}
           action={
