@@ -1,18 +1,18 @@
-import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
+import Button from "@mui/material/Button";
+import { useTheme } from "@mui/material/styles";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Unstable_Grid2";
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useMockedUser } from "src/hooks/use-mocked-user";
 
-import { SeoIllustration } from 'src/assets/illustrations';
+import { SeoIllustration } from "src/assets/illustrations";
 
-import { useSettingsContext } from 'src/components/settings';
+import { useSettingsContext } from "src/components/settings";
 
-import AppWelcome from '../app-welcome';
-import AppWidgetSummary from '../app-widget-summary';
-import AppCurrentDownload from '../app-current-download';
-import EcommerceYearlySales from '../../e-commerce/ecommerce-yearly-sales';
+import AppWelcome from "../app-welcome";
+import AppYearlySales from "../app-yearly-sales";
+import AppWidgetSummary from "../app-widget-summary";
+import AppCurrentDownload from "../app-current-download";
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ export default function OverviewAppView() {
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+    <Container maxWidth={settings.themeStretch ? false : "xl"}>
       <Grid container spacing={3}>
         <Grid xs={12}>
           <AppWelcome
@@ -79,94 +79,94 @@ export default function OverviewAppView() {
             title="Core Skills"
             chart={{
               series: [
-                { label: 'Frontend ', value: 2 },
-                { label: 'Backend  ', value: 2 },
-                { label: 'DBMS', value: 2 },
-                { label: 'Miscellaneous', value: 3 },
+                { label: "Frontend ", value: 2 },
+                { label: "Backend  ", value: 2 },
+                { label: "DBMS", value: 2 },
+                { label: "Miscellaneous", value: 3 },
               ],
             }}
           />
         </Grid>
 
         <Grid xs={12} md={6} lg={8}>
-          <EcommerceYearlySales
-              title="Skills"
-              chart={{
-                categories: [
-                  '',
-                  'React',
-                  'Flutter',
-                  'Spring',
-                  'Laravel',
-                  'Postgres',
-                  'MySQL',
-                  'Docker',
-                  'Scrum',
-                  'Designing',
-                  ''
-                ],
-                series: [
-                  {
-                    year: 'Frontend',
-                    data: [
-                      {
-                        name: 'React',
-                        data: [0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      },
-                      {
-                        name: 'Flutter',
-                        data: [0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0],
-                      },
-                    ],
-                  },
-                  {
-                    year: 'Backend',
-                    data: [
-                      {
-                        name: 'Spring',
-                        data: [0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0],
-                      },
-                      {
-                        name: 'Laravel',
-                        data: [0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0],
-                      },
-                    ],
-                  },
+          <AppYearlySales
+            title="Skills"
+            chart={{
+              categories: [
+                "",
+                "React",
+                "Flutter",
+                "Spring",
+                "Laravel",
+                "Postgres",
+                "MySQL",
+                "Docker",
+                "Scrum",
+                "Designing",
+                "",
+              ],
+              series: [
+                {
+                  year: "Frontend",
+                  data: [
+                    {
+                      name: "React",
+                      data: [0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    },
+                    {
+                      name: "Flutter",
+                      data: [0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0],
+                    },
+                  ],
+                },
+                {
+                  year: "Backend",
+                  data: [
+                    {
+                      name: "Spring",
+                      data: [0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0],
+                    },
+                    {
+                      name: "Laravel",
+                      data: [0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0],
+                    },
+                  ],
+                },
 
-                  {
-                    year: 'DBMS',
-                    data: [
-                      {
-                        name: 'Postgres',
-                        data: [0, 0, 0, 0, 0, 85, 0, 0, 0, 0, 0],
-                      },
-                      {
-                        name: 'MySQL',
-                        data: [0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 0],
-                      },
-                    ],
-                  },
+                {
+                  year: "DBMS",
+                  data: [
+                    {
+                      name: "Postgres",
+                      data: [0, 0, 0, 0, 0, 85, 0, 0, 0, 0, 0],
+                    },
+                    {
+                      name: "MySQL",
+                      data: [0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 0],
+                    },
+                  ],
+                },
 
-                  {
-                    year: 'Miscellaneous',
-                    data: [
-                      {
-                        name: 'Docker',
-                        data: [0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0],
-                      },
-                      {
-                        name: 'Scrum',
-                        data: [0, 0, 0, 0, 0, 0, 0, 0, 95, 0, 0],
-                      },
-                      {
-                        name: 'Designing',
-                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0],
-                      }
-                    ],
-                  }
-                ],
-              }}
-            />
+                {
+                  year: "Miscellaneous",
+                  data: [
+                    {
+                      name: "Docker",
+                      data: [0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0],
+                    },
+                    {
+                      name: "Scrum",
+                      data: [0, 0, 0, 0, 0, 0, 0, 0, 95, 0, 0],
+                    },
+                    {
+                      name: "Designing",
+                      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0],
+                    },
+                  ],
+                },
+              ],
+            }}
+          />
         </Grid>
       </Grid>
     </Container>

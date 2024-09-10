@@ -7,7 +7,7 @@ import { useGetProduct } from "src/api/product";
 import { useSettingsContext } from "src/components/settings";
 import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
 
-import ProductNewEditForm from "../product-new-edit-form";
+import ProductNewEditForm from "../../new/product-new-edit-form";
 
 // ----------------------------------------------------------------------
 
