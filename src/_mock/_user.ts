@@ -31,27 +31,6 @@ export const _userAbout = {
   },
 };
 
-export const _userFollowers = [...Array(18)].map((_, index) => ({
-  id: _mock.id(index),
-  name: _mock.fullName(index),
-  country: countries[index + 1].label,
-  avatarUrl: _mock.image.avatar(index),
-}));
-
-export const _userFriends = [...Array(18)].map((_, index) => ({
-  id: _mock.id(index),
-  role: _mock.role(index),
-  name: _mock.fullName(index),
-  avatarUrl: _mock.image.avatar(index),
-}));
-
-export const _userGallery = [...Array(12)].map((_, index) => ({
-  id: _mock.id(index),
-  postedAt: _mock.time(index),
-  title: _mock.postTitle(index),
-  imageUrl: _mock.image.cover(index),
-}));
-
 export const _userFeeds = [...Array(3)].map((_, index) => ({
   id: _mock.id(index),
   createdAt: _mock.time(index),

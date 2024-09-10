@@ -180,7 +180,7 @@ export default function ListView({ index }: Props) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.product.edit(id));
+      router.push(paths.dashboard.create.edit(id));
     },
     [router]
   );
@@ -205,7 +205,7 @@ export default function ListView({ index }: Props) {
           action={
             <Button
               component={RouterLink}
-              href={`${paths.dashboard.product.new}/${dashboardIndex}`}
+              href={`${paths.dashboard.create.new}/${dashboardIndex}`}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

@@ -101,7 +101,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(currentUser ? "Update success!" : "Create success!");
-      router.push(paths.dashboard.user.list);
+      router.push(paths.dashboard.view.list);
       console.info("DATA", data);
     } catch (error) {
       console.error(error);

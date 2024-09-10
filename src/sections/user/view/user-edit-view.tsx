@@ -1,11 +1,6 @@
-import Container from "@mui/material/Container";
-
-import { paths } from "src/routes/paths";
+import Grid from "@mui/material/Unstable_Grid2";
 
 import { _userList } from "src/_mock";
-
-import { useSettingsContext } from "src/components/settings";
-import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
 
 import UserNewEditForm from "../user-new-edit-form";
 
@@ -16,31 +11,11 @@ type Props = {
 };
 
 export default function UserEditView({ id }: Props) {
-  const settings = useSettingsContext();
-
   const currentUser = _userList.find((user) => user.id === id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : "lg"}>
-      <CustomBreadcrumbs
-        heading="Edit"
-        links={[
-          {
-            name: "Dashboard",
-            href: paths.dashboard.root,
-          },
-          {
-            name: "User",
-            href: paths.dashboard.user.root,
-          },
-          { name: currentUser?.name },
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
-
+    <Grid>
       <UserNewEditForm currentUser={currentUser} />
-    </Container>
+    </Grid>
   );
 }

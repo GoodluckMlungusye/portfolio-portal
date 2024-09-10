@@ -81,20 +81,20 @@ export function useNavData() {
         items: [
           {
             title: t("list"),
-            path: paths.dashboard.user.root,
+            path: paths.dashboard.view.root,
             icon: ICONS.file,
             children: managementList.map((item) => ({
               title: t(item.title),
-              path: `${paths.dashboard.user.list}/${item.id}`,
+              path: `${paths.dashboard.view.list}/${item.id}`,
             })),
           },
           {
             title: t("create"),
-            path: paths.dashboard.product.root,
+            path: paths.dashboard.create.root,
             icon: ICONS.banking,
             children: managementList.map((item) => ({
               title: t(item.title),
-              path: `${paths.dashboard.product.new}/${item.id}`,
+              path: `${paths.dashboard.create.new}/${item.id}`,
             })),
           },
         ],

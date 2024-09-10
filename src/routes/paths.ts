@@ -19,15 +19,24 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
+    view: {
+      root: `${ROOTS.DASHBOARD}/view`,
+      list: `${ROOTS.DASHBOARD}/view/list`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/view/${id}/edit`,
+    },
+    create: {
+      root: `${ROOTS.DASHBOARD}/create`,
+      new: `${ROOTS.DASHBOARD}/create/new`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/create/${id}/edit`,
+    },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
+      new: `${ROOTS.DASHBOARD}/user/new`,
       list: `${ROOTS.DASHBOARD}/user/list`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
-    },
-    product: {
-      root: `${ROOTS.DASHBOARD}/product`,
-      new: `${ROOTS.DASHBOARD}/product/new`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/product/${id}/edit`,
+      cards: `${ROOTS.DASHBOARD}/user/cards`,
+      profile: `${ROOTS.DASHBOARD}/user/profile`,
+      account: `${ROOTS.DASHBOARD}/user/account`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/user/${id}/edit`
     },
   },
 };

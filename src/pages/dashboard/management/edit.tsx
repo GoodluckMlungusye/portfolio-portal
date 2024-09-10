@@ -14,7 +14,7 @@ export default function EditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Edit</title>
+        <title> Management: Edit</title>
       </Helmet>
 
       <EditView id={`${id}`} />

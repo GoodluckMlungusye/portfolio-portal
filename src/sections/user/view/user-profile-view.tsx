@@ -9,23 +9,15 @@ import { paths } from "src/routes/paths";
 
 import { useMockedUser } from "src/hooks/use-mocked-user";
 
-import {
-  _userAbout,
-  _userFeeds,
-  _userFriends,
-  _userGallery,
-  _userFollowers,
-} from "src/_mock";
+import { _userAbout, _userFeeds } from "src/_mock";
 
 import Iconify from "src/components/iconify";
 import { useSettingsContext } from "src/components/settings";
 import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
 
 import ProfileHome from "../profile-home";
+import UserEditView from "./user-edit-view";
 import ProfileCover from "../profile-cover";
-import ProfileFriends from "../profile-friends";
-import ProfileGallery from "../profile-gallery";
-import ProfileFollowers from "../profile-followers";
 
 // ----------------------------------------------------------------------
 
@@ -36,19 +28,9 @@ const TABS = [
     icon: <Iconify icon="solar:user-id-bold" width={24} />,
   },
   {
-    value: "followers",
-    label: "Followers",
-    icon: <Iconify icon="solar:heart-bold" width={24} />,
-  },
-  {
-    value: "friends",
-    label: "Friends",
-    icon: <Iconify icon="solar:users-group-rounded-bold" width={24} />,
-  },
-  {
-    value: "gallery",
-    label: "Gallery",
-    icon: <Iconify icon="solar:gallery-wide-bold" width={24} />,
+    value: "edit",
+    label: "Edit",
+    icon: <Iconify icon="fluent:person-edit-24-filled" width={24} />,
   },
 ];
 
@@ -59,20 +41,11 @@ export default function UserProfileView() {
 
   const { user } = useMockedUser();
 
-  const [searchFriends, setSearchFriends] = useState("");
-
   const [currentTab, setCurrentTab] = useState("profile");
 
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       setCurrentTab(newValue);
-    },
-    []
-  );
-
-  const handleSearchFriends = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchFriends(event.target.value);
     },
     []
   );
@@ -83,7 +56,7 @@ export default function UserProfileView() {
         heading="Profile"
         links={[
           { name: "Dashboard", href: paths.dashboard.root },
-          { name: "User", href: paths.dashboard.user.root },
+          { name: "User", href: paths.dashboard.view.root },
           { name: user?.displayName },
         ]}
         sx={{
@@ -137,19 +110,7 @@ export default function UserProfileView() {
         <ProfileHome info={_userAbout} posts={_userFeeds} />
       )}
 
-      {currentTab === "followers" && (
-        <ProfileFollowers followers={_userFollowers} />
-      )}
-
-      {currentTab === "friends" && (
-        <ProfileFriends
-          friends={_userFriends}
-          searchFriends={searchFriends}
-          onSearchFriends={handleSearchFriends}
-        />
-      )}
-
-      {currentTab === "gallery" && <ProfileGallery gallery={_userGallery} />}
+      {currentTab === "edit" && <UserEditView id={user.id} />}
     </Container>
   );
 }

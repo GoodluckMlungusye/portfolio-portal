@@ -110,7 +110,7 @@ export default function NewEditForm({ currentProduct }: Props) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(currentProduct ? "Update success!" : "Create success!");
-      router.push(paths.dashboard.product.root);
+      router.push(paths.dashboard.create.root);
       console.info("DATA", data);
     } catch (error) {
       console.error(error);

@@ -1,3 +1,5 @@
+// import { useMemo, useState, useEffect } from "react";
+
 import Container from "@mui/material/Container";
 
 import { paths } from "src/routes/paths";
@@ -16,6 +18,26 @@ type Props = {
 };
 
 export default function EditView({ id }: Props) {
+  // const [dashboardTitle, setDashboardTitle] = useState("");
+  // const managementList = useMemo(
+  //   () => [
+  //     { title: "Projects", id: 1 },
+  //     { title: "Skills", id: 2 },
+  //     { title: "Education", id: 3 },
+  //     { title: "Explore", id: 4 },
+  //     { title: "Services", id: 5 },
+  //     { title: "Navigations", id: 6 },
+  //   ],
+  //   []
+  // );
+
+  // useEffect(() => {
+  //   const foundItem = managementList.find((item) => item.id === Number(id));
+  //   if (foundItem) {
+  //     setDashboardTitle(foundItem.title);
+  //   }
+  // }, [id, managementList]);
+
   const settings = useSettingsContext();
 
   const { product: currentProduct } = useGetProduct(id);
@@ -27,8 +49,8 @@ export default function EditView({ id }: Props) {
         links={[
           { name: "Dashboard", href: paths.dashboard.root },
           {
-            name: "Product",
-            href: paths.dashboard.product.root,
+            name: "Edit",
+            href: paths.dashboard.create.root,
           },
           { name: currentProduct?.name },
         ]}
