@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 
 import { useParams } from "src/routes/hooks";
 
-import { UserListView } from "src/sections/user/view";
+import { UserListView } from "src/sections/dashboard/management/list/view";
 
 // ----------------------------------------------------------------------
 

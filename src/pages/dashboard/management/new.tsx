@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 
 import { useParams } from "src/routes/hooks";
 
-import { ProductCreateView } from "src/sections/product/view";
+import { ProductCreateView } from "src/sections/dashboard/management/edit";
 
 // ----------------------------------------------------------------------
 
