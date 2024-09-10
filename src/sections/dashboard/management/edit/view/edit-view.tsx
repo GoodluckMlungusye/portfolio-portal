@@ -7,7 +7,7 @@ import { useGetProduct } from "src/api/product";
 import { useSettingsContext } from "src/components/settings";
 import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
 
-import ProductNewEditForm from "../../new/product-new-edit-form";
+import NewEditForm from "../../create/new-edit-form";
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ type Props = {
   id: string;
 };
 
-export default function ProductEditView({ id }: Props) {
+export default function EditView({ id }: Props) {
   const settings = useSettingsContext();
 
   const { product: currentProduct } = useGetProduct(id);
@@ -37,7 +37,7 @@ export default function ProductEditView({ id }: Props) {
         }}
       />
 
-      <ProductNewEditForm currentProduct={currentProduct} />
+      <NewEditForm currentProduct={currentProduct} />
     </Container>
   );
 }

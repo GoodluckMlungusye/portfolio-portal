@@ -7,7 +7,7 @@ import { paths } from "src/routes/paths";
 import { useSettingsContext } from "src/components/settings";
 import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
 
-import ProductNewEditForm from "../product-new-edit-form";
+import NewEditForm from "../new-edit-form";
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ type Props = {
   index: string;
 };
 
-export default function ProductCreateView({ index }: Props) {
+export default function CreateView({ index }: Props) {
   const [dashboardTitle, setDashboardTitle] = useState("");
 
   const managementList = useMemo(
@@ -57,7 +57,7 @@ export default function ProductCreateView({ index }: Props) {
         }}
       />
 
-      <ProductNewEditForm />
+      <NewEditForm />
     </Container>
   );
 }

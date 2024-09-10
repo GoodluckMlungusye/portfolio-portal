@@ -1,2 +1,2 @@
-export { default as ProductEditView } from './view/product-edit-view';
+export { default as EditView } from './view/edit-view';
 

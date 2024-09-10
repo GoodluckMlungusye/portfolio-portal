@@ -74,7 +74,7 @@ type Props = {
   index: string;
 };
 
-export default function UserListView({ index }: Props) {
+export default function ListView({ index }: Props) {
   const [dashboardTitle, setDashboardTitle] = useState("");
   const [dashboardIndex, setDashboardIndex] = useState(0);
 

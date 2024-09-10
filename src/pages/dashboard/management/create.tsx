@@ -2,11 +2,11 @@ import { Helmet } from "react-helmet-async";
 
 import { useParams } from "src/routes/hooks";
 
-import { ProductCreateView } from "src/sections/dashboard/management/new";
+import { CreateView } from "src/sections/dashboard/management/create";
 
 // ----------------------------------------------------------------------
 
-export default function ProductCreatePage() {
+export default function CreatePage() {
   const params = useParams();
 
   const { index } = params;
@@ -16,7 +16,7 @@ export default function ProductCreatePage() {
         <title> Management: Create</title>
       </Helmet>
 
-      <ProductCreateView index={`${index}`} />
+      <CreateView index={`${index}`} />
     </>
   );
 }

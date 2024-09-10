@@ -30,7 +30,7 @@ interface Props extends CardProps {
   };
 }
 
-export default function AppYearlySales({
+export default function AppAreaVisual({
   title,
   subheader,
   chart,

@@ -10,7 +10,7 @@ import { SeoIllustration } from "src/assets/illustrations";
 import { useSettingsContext } from "src/components/settings";
 
 import AppWelcome from "../app-welcome";
-import AppYearlySales from "../app-yearly-sales";
+import AppAreaVisual from "../app-area-visual";
 import AppWidgetSummary from "../app-widget-summary";
 import AppCurrentDownload from "../app-current-download";
 
@@ -89,7 +89,7 @@ export default function OverviewAppView() {
         </Grid>
 
         <Grid xs={12} md={6} lg={8}>
-          <AppYearlySales
+          <AppAreaVisual
             title="Skills"
             chart={{
               categories: [

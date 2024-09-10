@@ -34,7 +34,7 @@ type Props = {
   currentProduct?: IProductItem;
 };
 
-export default function ProductNewEditForm({ currentProduct }: Props) {
+export default function NewEditForm({ currentProduct }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive("up", "md");

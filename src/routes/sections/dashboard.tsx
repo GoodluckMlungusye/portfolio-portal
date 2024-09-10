@@ -9,13 +9,9 @@ import { LoadingScreen } from "src/components/loading-screen";
 // ----------------------------------------------------------------------
 
 const IndexPage = lazy(() => import("src/pages/dashboard/overview/app"));
-const ProductCreatePage = lazy(() =>
-  import("src/pages/dashboard/management/new")
-);
-const UserListPage = lazy(() => import("src/pages/dashboard/management/list"));
-const ProductEditPage = lazy(() =>
-  import("src/pages/dashboard/management/edit")
-);
+const CreatePage = lazy(() => import("src/pages/dashboard/management/create"));
+const ListPage = lazy(() => import("src/pages/dashboard/management/list"));
+const EditPage = lazy(() => import("src/pages/dashboard/management/edit"));
 
 // ----------------------------------------------------------------------
 
@@ -33,13 +29,13 @@ export const dashboardRoutes = [
       { element: <IndexPage />, index: true },
       {
         path: "user",
-        children: [{ path: "list/:index", element: <UserListPage /> }],
+        children: [{ path: "list/:index", element: <ListPage /> }],
       },
       {
         path: "product",
         children: [
-          { path: "new/:index", element: <ProductCreatePage /> },
-          { path: ":id/edit", element: <ProductEditPage /> },
+          { path: "new/:index", element: <CreatePage /> },
+          { path: ":id/edit", element: <EditPage /> },
         ],
       },
     ],
