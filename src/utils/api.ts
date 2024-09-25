@@ -1,27 +1,56 @@
 export const endpoints = {
-    chat: '/api/chat',
-    kanban: '/api/kanban',
-    calendar: '/api/calendar',
-    auth: {
-      me: '/api/auth/me',
-      login: '/api/auth/login',
-      register: '/api/auth/register',
+    client: {
+      get: '/client/all',
+      create: '/client/new',
+      delete: '/client/delete'
     },
-    mail: {
-      list: '/api/mail/list',
-      details: '/api/mail/details',
-      labels: '/api/mail/labels',
+    contact: {
+      get: '/contact/all',
+      create: '/contact/new',
+      update: '/contact/update',
+      delete: '/contact/delete'
     },
-    post: {
-      list: '/api/post/list',
-      details: '/api/post/details',
-      latest: '/api/post/latest',
-      search: '/api/post/search',
+    education: {
+      get: '/education/all',
+      create: '/education/new',
+      update: '/education/update',
+      delete: '/education/delete'
     },
-    product: {
-      list: '/api/product/list',
-      details: '/api/product/details',
-      search: '/api/product/search',
+    explore: {
+      get: '/explore/all',
+      create: '/explore/new',
+      update: '/explore/update',
+      delete: '/explore/delete'
     },
+    link: {
+      get: '/link/all',
+      create: '/link/new',
+      update: '/link/update',
+      delete: '/link/delete'
+    },
+    project: {
+      get: '/project/all',
+      create: '/project/new',
+      update: '/project/update',
+      delete: '/project/delete'
+    },
+    service: {
+      get: '/service/all',
+      create: '/service/new',
+      update: '/service/update',
+      delete: '/service/delete'
+    },
+    skill: {
+      get: '/skill/all',
+      create: '/skill/new',
+      update: '/skill/update',
+      delete: '/skill/delete'
+    },
+    subSkill: {
+      get: '/subSkill/all',
+      create: '/subSkill/new',
+      update: '/subSkill/update',
+      delete: '/subSkill/delete'
+    }
   };
   

@@ -3,7 +3,7 @@ import { paths } from 'src/routes/paths';
 // API
 // ----------------------------------------------------------------------
 
-export const BASE_URL = import.meta.env.VITE_HOST_API;
+export const BASE_URL = "http://localhost:8080/api/portfolio";
 export const HOST_API = import.meta.env.VITE_HOST_API;
 export const ASSETS_API = import.meta.env.VITE_ASSETS_API;
 

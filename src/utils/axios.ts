@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { HOST_API } from 'src/config-global';
+import { BASE_URL } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  baseURL: HOST_API,
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json'
   },
