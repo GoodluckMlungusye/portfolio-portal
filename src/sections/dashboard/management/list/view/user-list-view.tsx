@@ -1,4 +1,5 @@
 import isEqual from "lodash/isEqual";
+import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState, useEffect, useCallback } from "react";
 
 import Tab from "@mui/material/Tab";
@@ -6,11 +7,9 @@ import Tabs from "@mui/material/Tabs";
 import Card from "@mui/material/Card";
 import Table from "@mui/material/Table";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import { alpha } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import TableBody from "@mui/material/TableBody";
-import IconButton from "@mui/material/IconButton";
 import TableContainer from "@mui/material/TableContainer";
 
 import { paths } from "src/routes/paths";
@@ -19,7 +18,10 @@ import { RouterLink } from "src/routes/components";
 
 import { useBoolean } from "src/hooks/use-boolean";
 
-import { _roles, _userList, USER_STATUS_OPTIONS } from "src/_mock";
+import { endpoints } from 'src/utils/endpoint';
+
+import { getData } from 'src/services/getService';
+import { _userList, USER_STATUS_OPTIONS } from "src/_mock";
 
 import Label from "src/components/label";
 import Iconify from "src/components/iconify";
@@ -35,7 +37,6 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from "src/components/table";
 
@@ -47,7 +48,6 @@ import {
 
 import UserTableRow from "../user-table-row";
 import UserTableToolbar from "../user-table-toolbar";
-import UserTableFiltersResult from "../user-table-filters-result";
 
 // ----------------------------------------------------------------------
 
@@ -55,11 +55,8 @@ const STATUS_OPTIONS = [{ value: "all", label: "All" }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: "name", label: "Name" },
-  { id: "phoneNumber", label: "Phone Number", width: 180 },
-  { id: "company", label: "Company", width: 220 },
-  { id: "role", label: "Role", width: 180 },
-  { id: "status", label: "Status", width: 100 },
-  { id: "", width: 88 },
+  { id: "email", label: "Email", width: 220 },
+  { id: "", label: "Actions", width: 88 }
 ];
 
 const defaultFilters: IUserTableFilters = {
@@ -78,6 +75,11 @@ export default function ListView({ index }: Props) {
   const [dashboardTitle, setDashboardTitle] = useState("");
   const [dashboardIndex, setDashboardIndex] = useState(0);
 
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['testData'],
+    queryFn: () => getData(endpoints.test.get),
+  });
+
   const managementList = useMemo(
     () => [
       { title: "Projects", id: 1 },
@@ -89,6 +91,12 @@ export default function ListView({ index }: Props) {
     ],
     []
   );
+
+  const hasStatus = false;
+
+  console.log("LOADING: ", isLoading);
+  console.log("ERROR: ", error);
+  console.log("DATA: ", data);
 
   useEffect(() => {
     const foundItem = managementList.find((item) => item.id === Number(index));
@@ -140,10 +148,6 @@ export default function ListView({ index }: Props) {
     [table]
   );
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
   const handleDeleteRow = useCallback(
     (id: string) => {
       const deleteRow = tableData.filter((row) => row.id !== id);
@@ -191,6 +195,14 @@ export default function ListView({ index }: Props) {
     },
     [handleFilters]
   );
+  
+  // if (isLoading) {
+  //   return <>Loading data...</>;
+  // }
+
+  // if (error) {
+  //   return <>Error fetching data: {error.message}</>;
+  // }
 
   return (
     <>
@@ -218,86 +230,56 @@ export default function ListView({ index }: Props) {
         />
 
         <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) =>
-                `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === "all" || tab.value === filters.status) &&
-                        "filled") ||
-                      "soft"
-                    }
-                    color={
-                      (tab.value === "active" && "success") ||
-                      (tab.value === "pending" && "warning") ||
-                      (tab.value === "banned" && "error") ||
-                      "default"
-                    }
-                  >
-                    {["active", "pending", "banned", "rejected"].includes(
-                      tab.value
-                    )
-                      ? tableData.filter((user) => user.status === tab.value)
-                          .length
-                      : tableData.length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
+          {hasStatus && (
+            <Tabs
+              value={filters.status}
+              onChange={handleFilterStatus}
+              sx={{
+                px: 2.5,
+                boxShadow: (theme) =>
+                  `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+              }}
+            >
+              {STATUS_OPTIONS.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  iconPosition="end"
+                  value={tab.value}
+                  label={tab.label}
+                  icon={
+                    <Label
+                      variant={
+                        ((tab.value === "all" ||
+                          tab.value === filters.status) &&
+                          "filled") ||
+                        "soft"
+                      }
+                      color={
+                        (tab.value === "active" && "success") ||
+                        (tab.value === "pending" && "warning") ||
+                        (tab.value === "banned" && "error") ||
+                        "default"
+                      }
+                    >
+                      {["active", "pending", "banned", "rejected"].includes(
+                        tab.value
+                      )
+                        ? tableData.filter((user) => user.status === tab.value)
+                            .length
+                        : tableData.length}
+                    </Label>
+                  }
+                />
+              ))}
+            </Tabs>
+          )}
 
           <UserTableToolbar
             filters={filters}
             onFilters={handleFilters}
-            //
-            roleOptions={_roles}
           />
 
-          {canReset && (
-            <UserTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
-
           <TableContainer sx={{ position: "relative", overflow: "unset" }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
             <Scrollbar>
               <Table
                 size={table.dense ? "small" : "medium"}
@@ -310,12 +292,6 @@ export default function ListView({ index }: Props) {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered.map((row) => row.id)
-                    )
-                  }
                 />
 
                 <TableBody>
@@ -328,8 +304,6 @@ export default function ListView({ index }: Props) {
                       <UserTableRow
                         key={row.id}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
                       />
