@@ -135,3 +135,10 @@ export type IUserAccountChangePassword = {
   newPassword: string;
   confirmNewPassword: string;
 };
+
+export type Column = {
+  id: string;
+  label: string;
+  minWidth?: number;
+  align?: 'right';
+};

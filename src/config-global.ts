@@ -3,7 +3,6 @@ import { paths } from 'src/routes/paths';
 // API
 // ----------------------------------------------------------------------
 
-export const TEST_API_URL = "https://jsonplaceholder.typicode.com";
 export const BASE_API_URL = "http://localhost:8080/api/portfolio";
 export const HOST_API = import.meta.env.VITE_HOST_API;
 export const ASSETS_API = import.meta.env.VITE_ASSETS_API;

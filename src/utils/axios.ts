@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { TEST_API_URL } from 'src/config-global';
+import { BASE_API_URL } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  baseURL: TEST_API_URL,
+  baseURL: BASE_API_URL,
   headers: {
     'Content-Type': 'application/json'
   },

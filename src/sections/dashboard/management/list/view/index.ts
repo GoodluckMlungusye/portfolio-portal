@@ -1,1 +1,1 @@
-export { default as ListView } from './user-list-view';
+export { default as ListView } from './list-view';

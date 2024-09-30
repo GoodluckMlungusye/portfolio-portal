@@ -1,7 +1,4 @@
 export const endpoints = {
-    test: {
-      get: '/comments'
-    },
     client: {
       get: '/client/all',
       create: '/client/new',

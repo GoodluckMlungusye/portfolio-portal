@@ -77,7 +77,7 @@ export default function ListView({ index }: Props) {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['testData'],
-    queryFn: () => getData(endpoints.test.get),
+    queryFn: () => getData(endpoints.link.get),
   });
 
   const managementList = useMemo(
