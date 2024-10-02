@@ -23,6 +23,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { generateColumns } from 'src/utils/generate-columns';
 
+import { useDataContext } from 'src/contexts/data-context';
+
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -105,8 +107,25 @@ type Props = {
 };
 
 export default function ListView({ index }: Props) {
+
+  const { dataProvided, loading, errorMessage } = useDataContext();
+
+  console.log("LOADING: ", loading);
+  console.log("ERROR: ", errorMessage);
+  console.log("DATA: ", dataProvided);
+
+  // const router = useRouter();
+  const confirm = useBoolean();
+  const popover = usePopover();
+  const settings = useSettingsContext();
+
   const [dashboardTitle, setDashboardTitle] = React.useState('');
   const [dashboardIndex, setDashboardIndex] = React.useState(0);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const startPaginationRows = page * rowsPerPage;
+  const endPaginationRows = startPaginationRows + rowsPerPage;
 
   const managementList = React.useMemo(
     () => [
@@ -128,17 +147,6 @@ export default function ListView({ index }: Props) {
     }
   }, [index, managementList]);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const confirm = useBoolean();
-
-  const popover = usePopover();
-
-  const settings = useSettingsContext();
-
-  // const router = useRouter();
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -154,6 +162,47 @@ export default function ListView({ index }: Props) {
   //   },
   //   [router]
   // );
+
+  const columnHeads = columns.map((column) => (
+    <TableCell
+      key={column.id}
+      align={column.align}
+      style={{ minWidth: column.minWidth }}
+    >
+      {column.label}
+    </TableCell>
+  ));
+
+
+  const tableRows = rows.slice(startPaginationRows, endPaginationRows).map((row) => (
+    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+      {columns.map((column) => {
+        if (column.id === 'actions') {
+          return (
+            <TableCell
+              key={column.id}
+              align="right"
+              sx={{ px: 1, whiteSpace: 'nowrap' }}
+            >
+              <IconButton
+                color={popover.open ? 'inherit' : 'default'}
+                onClick={popover.onOpen}
+              >
+                <Iconify icon="eva:more-vertical-fill" />
+              </IconButton>
+            </TableCell>
+          );
+        }
+        const rowIndex = column.id as keyof typeof row;
+        const value = row[rowIndex];
+        return (
+          <TableCell key={column.id} align={column.align}>
+            {value}
+          </TableCell>
+        );
+      })}
+    </TableRow>
+  ))
 
   return (
     <>
@@ -198,47 +247,11 @@ export default function ListView({ index }: Props) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
+                  {columnHeads}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      if (column.id === 'actions') {
-                        // Render actions cell
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align="right"
-                            sx={{ px: 1, whiteSpace: 'nowrap' }}
-                          >
-                            <IconButton
-                              color={popover.open ? 'inherit' : 'default'}
-                              onClick={popover.onOpen}
-                            >
-                              <Iconify icon="eva:more-vertical-fill" />
-                            </IconButton>
-                          </TableCell>
-                        );
-                      }
-                      const value = row[column.id as keyof typeof row];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                  {tableRows}
               </TableBody>
             </Table>
           </TableContainer>
