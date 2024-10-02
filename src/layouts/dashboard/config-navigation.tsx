@@ -3,8 +3,10 @@ import { useMemo } from "react";
 import { paths } from "src/routes/paths";
 
 import { useTranslate } from "src/locales";
+import { useDataContext } from 'src/contexts/data-context';
 
 import SvgColor from "src/components/svg-color";
+
 
 // ----------------------------------------------------------------------
 
@@ -46,17 +48,11 @@ const ICONS = {
 
 export function useNavData() {
   const { t } = useTranslate();
+  const { dataProvided } = useDataContext();
 
-  const managementList = useMemo(
-    () => [
-      { title: "projects", id: 1 },
-      { title: "skills", id: 2 },
-      { title: "education", id: 3 },
-      { title: "explore", id: 4 },
-      { title: "services", id: 5 },
-      { title: "navigations", id: 6 },
-    ],
-    []
+  const navigationItems = useMemo(
+    () => dataProvided,
+    [dataProvided]
   );
 
   const data = useMemo(
@@ -83,8 +79,8 @@ export function useNavData() {
             title: t("list"),
             path: paths.dashboard.view.root,
             icon: ICONS.file,
-            children: managementList.map((item) => ({
-              title: t(item.title),
+            children: navigationItems.map((item) => ({
+              title: t(item.name),
               path: `${paths.dashboard.view.list}/${item.id}`,
             })),
           },
@@ -92,15 +88,15 @@ export function useNavData() {
             title: t("create"),
             path: paths.dashboard.create.root,
             icon: ICONS.banking,
-            children: managementList.map((item) => ({
-              title: t(item.title),
+            children: navigationItems.map((item) => ({
+              title: t(item.name),
               path: `${paths.dashboard.create.new}/${item.id}`,
             })),
           },
         ],
       },
     ],
-    [t, managementList]
+    [t, navigationItems]
   );
 
   return data;

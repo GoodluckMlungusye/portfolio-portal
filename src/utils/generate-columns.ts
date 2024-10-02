@@ -8,7 +8,7 @@ export function generateColumns<T extends object>(rows: T[]): Column[] {
     return Object.keys(rows[0]).map((key) => ({
       id: key,
       label: capitalize(key.replace('_', ' ')),
-      align: typeof rows[0][key as keyof T] === 'number' ? 'right' : undefined,
+      align: typeof rows[0][key as keyof T] === 'number' ? 'left' : undefined,
       minWidth: 100,
     }));
   }

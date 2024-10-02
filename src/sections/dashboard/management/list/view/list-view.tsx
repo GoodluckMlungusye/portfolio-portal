@@ -21,6 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { capitalize } from 'src/utils/capitalize';
 import { generateColumns } from 'src/utils/generate-columns';
 
 import { useDataContext } from 'src/contexts/data-context';
@@ -31,88 +32,12 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-// Array of objects without the need for createData function
-const rows = [
-  {
-    name: 'India',
-    code: 'IN',
-    population: 1324171354,
-    size: 3287263,
-    density: 1324171354 / 3287263,
-  },
-  {
-    name: 'China',
-    code: 'CN',
-    population: 1403500365,
-    size: 9596961,
-    density: 1403500365 / 9596961,
-  },
-  { name: 'Italy', code: 'IT', population: 60483973, size: 301340, density: 60483973 / 301340 },
-  {
-    name: 'United States',
-    code: 'US',
-    population: 327167434,
-    size: 9833520,
-    density: 327167434 / 9833520,
-  },
-  { name: 'Canada', code: 'CA', population: 37602103, size: 9984670, density: 37602103 / 9984670 },
-  {
-    name: 'Australia',
-    code: 'AU',
-    population: 25475400,
-    size: 7692024,
-    density: 25475400 / 7692024,
-  },
-  { name: 'Germany', code: 'DE', population: 83019200, size: 357578, density: 83019200 / 357578 },
-  { name: 'Ireland', code: 'IE', population: 4857000, size: 70273, density: 4857000 / 70273 },
-  {
-    name: 'Mexico',
-    code: 'MX',
-    population: 126577691,
-    size: 1972550,
-    density: 126577691 / 1972550,
-  },
-  { name: 'Japan', code: 'JP', population: 126317000, size: 377973, density: 126317000 / 377973 },
-  { name: 'France', code: 'FR', population: 67022000, size: 640679, density: 67022000 / 640679 },
-  {
-    name: 'United Kingdom',
-    code: 'GB',
-    population: 67545757,
-    size: 242495,
-    density: 67545757 / 242495,
-  },
-  {
-    name: 'Russia',
-    code: 'RU',
-    population: 146793744,
-    size: 17098246,
-    density: 146793744 / 17098246,
-  },
-  { name: 'Nigeria', code: 'NG', population: 200962417, size: 923768, density: 200962417 / 923768 },
-  {
-    name: 'Brazil',
-    code: 'BR',
-    population: 210147125,
-    size: 8515767,
-    density: 210147125 / 8515767,
-  },
-];
-
-let columns = generateColumns(rows);
-
-columns = [...columns, { id: 'actions', label: 'Actions', align: 'right', minWidth: 100 }];
-
 type Props = {
   index: string;
 };
 
 export default function ListView({ index }: Props) {
-
-  const { dataProvided, loading, errorMessage } = useDataContext();
-
-  console.log("LOADING: ", loading);
-  console.log("ERROR: ", errorMessage);
-  console.log("DATA: ", dataProvided);
+  const { dataProvided } = useDataContext();
 
   // const router = useRouter();
   const confirm = useBoolean();
@@ -123,29 +48,30 @@ export default function ListView({ index }: Props) {
   const [dashboardIndex, setDashboardIndex] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const startPaginationRows = page * rowsPerPage;
   const endPaginationRows = startPaginationRows + rowsPerPage;
 
-  const managementList = React.useMemo(
-    () => [
-      { title: 'Projects', id: 1 },
-      { title: 'Skills', id: 2 },
-      { title: 'Education', id: 3 },
-      { title: 'Explore', id: 4 },
-      { title: 'Services', id: 5 },
-      { title: 'Navigations', id: 6 },
-    ],
-    []
-  );
+  const linkList = React.useMemo(() => dataProvided, [dataProvided]);
 
-  React.useEffect(() => {
-    const foundItem = managementList.find((item) => item.id === Number(index));
-    if (foundItem) {
-      setDashboardTitle(foundItem.title);
+  let columns = generateColumns(linkList);
+
+  columns = [
+    ...columns,
+    { id: 'actions', label: 'Actions', align: 'left', minWidth: 100 },
+  ];
+
+  const foundItem = linkList.find((item) => item.id === Number(index));
+
+  if (foundItem) {
+    if (dashboardTitle !== foundItem.name) {
+      setDashboardTitle(foundItem.name);
+    }
+    if (dashboardIndex !== foundItem.id) {
       setDashboardIndex(foundItem.id);
     }
-  }, [index, managementList]);
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -163,31 +89,36 @@ export default function ListView({ index }: Props) {
   //   [router]
   // );
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value.toLowerCase());
+      setPage(0);
+    };
+
+    const filteredList = linkList.filter((row) => columns.some((column) => {
+      const rowValue = row[column.id as keyof typeof row];
+      if (rowValue) {
+        return rowValue.toString().toLowerCase().includes(searchQuery);
+      }
+      return false;
+    }));
+
   const columnHeads = columns.map((column) => (
     <TableCell
       key={column.id}
       align={column.align}
-      style={{ minWidth: column.minWidth }}
+      style={{ minWidth: column.minWidth, width: '50%' }}
     >
       {column.label}
     </TableCell>
   ));
 
-
-  const tableRows = rows.slice(startPaginationRows, endPaginationRows).map((row) => (
+  const tableRows = filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
       {columns.map((column) => {
         if (column.id === 'actions') {
           return (
-            <TableCell
-              key={column.id}
-              align="right"
-              sx={{ px: 1, whiteSpace: 'nowrap' }}
-            >
-              <IconButton
-                color={popover.open ? 'inherit' : 'default'}
-                onClick={popover.onOpen}
-              >
+            <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+              <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
                 <Iconify icon="eva:more-vertical-fill" />
               </IconButton>
             </TableCell>
@@ -196,13 +127,13 @@ export default function ListView({ index }: Props) {
         const rowIndex = column.id as keyof typeof row;
         const value = row[rowIndex];
         return (
-          <TableCell key={column.id} align={column.align}>
+          <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
             {value}
           </TableCell>
         );
       })}
     </TableRow>
-  ))
+  ));
 
   return (
     <>
@@ -211,7 +142,7 @@ export default function ListView({ index }: Props) {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: dashboardTitle },
+            { name: capitalize(dashboardTitle) },
             { name: 'List' },
           ]}
           action={
@@ -233,6 +164,8 @@ export default function ListView({ index }: Props) {
           <TextField
             fullWidth
             placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -240,25 +173,21 @@ export default function ListView({ index }: Props) {
                 </InputAdornment>
               ),
             }}
-            sx={{ mb: 4 , px: 2, pt: 2}}
+            sx={{ mb: 4, px: 2, pt: 2 }}
           />
 
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
-                <TableRow>
-                  {columnHeads}
-                </TableRow>
+                <TableRow>{columnHeads}</TableRow>
               </TableHead>
-              <TableBody>
-                  {tableRows}
-              </TableBody>
+              <TableBody>{tableRows}</TableBody>
             </Table>
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={filteredList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -301,11 +230,7 @@ export default function ListView({ index }: Props) {
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button
-            variant="contained"
-            color="error"
-            //  onClick={onDeleteRow}
-          >
+          <Button variant="contained" color="error">
             Delete
           </Button>
         }
