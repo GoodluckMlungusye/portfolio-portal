@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import React, {useMemo, ReactNode , useContext, createContext } from 'react';
 
-import { endpoints } from 'src/utils/endpoint';
+import { api } from 'src/utils/api';
 
 import { getData } from 'src/services/getService';
 
 interface DataContextType {
-  dataProvided: any[];
+  data: any[];
   loading: boolean;
   errorMessage: string | null;
 }
@@ -15,16 +15,17 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 interface DataProviderProps {
   children: ReactNode;
+  endpoint: string;
 }
 
-export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
+export const DataProvider: React.FC<DataProviderProps> = ({ children, endpoint }) => {
   const { isLoading, error, data } = useQuery({
-    queryKey: ['link'],
-    queryFn: () => getData(endpoints.link.get),
+    queryKey: [`${endpoint}`],
+    queryFn: () => getData(`${api.get}/${endpoint}`),
   });
 
   const contextValue = useMemo(() => ({
-    dataProvided: data || [],
+    data: data || [],
     loading: isLoading,
     errorMessage: error?.message || null,
   }), [data, isLoading, error]);

@@ -1,4 +1,5 @@
-export const endpoints = {
+export const api = {
+    get: '/all',
     client: {
       get: '/client/all',
       create: '/client/new',

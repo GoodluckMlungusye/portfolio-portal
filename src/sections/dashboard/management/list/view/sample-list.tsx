@@ -18,7 +18,7 @@ import { RouterLink } from "src/routes/components";
 
 import { useBoolean } from "src/hooks/use-boolean";
 
-import { endpoints } from 'src/utils/endpoint';
+import { api } from 'src/utils/api';
 
 import { getData } from 'src/services/getService';
 import { _userList, USER_STATUS_OPTIONS } from "src/_mock";
@@ -77,7 +77,7 @@ export default function ListView({ index }: Props) {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['testData'],
-    queryFn: () => getData(endpoints.link.get),
+    queryFn: () => getData(api.link.get),
   });
 
   const managementList = useMemo(

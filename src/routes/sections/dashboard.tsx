@@ -35,12 +35,12 @@ export const dashboardRoutes = [
       { element: <IndexPage />, index: true },
       {
         path: "view",
-        children: [{ path: "list/:index", element: <ListPage /> }],
+        children: [{ path: "list/:name", element: <ListPage /> }],
       },
       {
         path: "create",
         children: [
-          { path: "new/:index", element: <CreatePage /> },
+          { path: "new/:name", element: <CreatePage /> },
           { path: ":id/edit", element: <EditPage /> },
         ],
       },

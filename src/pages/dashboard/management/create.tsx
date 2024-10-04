@@ -9,14 +9,14 @@ import { CreateView } from "src/sections/dashboard/management/create";
 export default function CreatePage() {
   const params = useParams();
 
-  const { index } = params;
+  const { name } = params;
   return (
     <>
       <Helmet>
         <title> Management: Create</title>
       </Helmet>
 
-      <CreateView index={`${index}`} />
+      <CreateView name={`${name}`} />
     </>
   );
 }

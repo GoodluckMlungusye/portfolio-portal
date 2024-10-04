@@ -33,19 +33,17 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type Props = {
-  index: string;
+  name: string;
 };
 
-export default function ListView({ index }: Props) {
-  const { dataProvided } = useDataContext();
+export default function ListView({ name }: Props) {
+  const { data } = useDataContext();
 
   // const router = useRouter();
   const confirm = useBoolean();
   const popover = usePopover();
   const settings = useSettingsContext();
 
-  const [dashboardTitle, setDashboardTitle] = React.useState('');
-  const [dashboardIndex, setDashboardIndex] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -53,25 +51,12 @@ export default function ListView({ index }: Props) {
   const startPaginationRows = page * rowsPerPage;
   const endPaginationRows = startPaginationRows + rowsPerPage;
 
-  const linkList = React.useMemo(() => dataProvided, [dataProvided]);
-
-  let columns = generateColumns(linkList);
+  let columns = generateColumns(data);
 
   columns = [
     ...columns,
     { id: 'actions', label: 'Actions', align: 'left', minWidth: 100 },
   ];
-
-  const foundItem = linkList.find((item) => item.id === Number(index));
-
-  if (foundItem) {
-    if (dashboardTitle !== foundItem.name) {
-      setDashboardTitle(foundItem.name);
-    }
-    if (dashboardIndex !== foundItem.id) {
-      setDashboardIndex(foundItem.id);
-    }
-  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -94,7 +79,7 @@ export default function ListView({ index }: Props) {
       setPage(0);
     };
 
-    const filteredList = linkList.filter((row) => columns.some((column) => {
+    const filteredList = data.filter((row) => columns.some((column) => {
       const rowValue = row[column.id as keyof typeof row];
       if (rowValue) {
         return rowValue.toString().toLowerCase().includes(searchQuery);
@@ -142,17 +127,17 @@ export default function ListView({ index }: Props) {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: capitalize(dashboardTitle) },
+            { name: capitalize(name) },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={`${paths.dashboard.create.new}/${dashboardIndex}`}
+              href={`${paths.dashboard.create.new}/${name}`}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              {`New ${dashboardTitle}`}
+              {`New ${name}`}
             </Button>
           }
           sx={{

@@ -15,8 +15,6 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 import { AuthProvider } from 'src/auth/context/jwt';
 
-import { DataProvider } from './contexts/data-context';
-
 // ----------------------------------------------------------------------
 
 export default function App() {
@@ -47,13 +45,11 @@ export default function App() {
         }}
       >
         <ThemeProvider>
-          <DataProvider>
             <MotionLazy>
               <SettingsDrawer />
               <ProgressBar />
               <Router />
             </MotionLazy>
-          </DataProvider>
         </ThemeProvider>
       </SettingsProvider>
     </AuthProvider>

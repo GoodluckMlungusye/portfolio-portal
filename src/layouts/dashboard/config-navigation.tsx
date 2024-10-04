@@ -1,9 +1,12 @@
 import { useMemo } from "react";
+import { useQuery } from '@tanstack/react-query';
 
 import { paths } from "src/routes/paths";
 
+import { api } from 'src/utils/api';
+
 import { useTranslate } from "src/locales";
-import { useDataContext } from 'src/contexts/data-context';
+import { getData } from 'src/services/getService';
 
 import SvgColor from "src/components/svg-color";
 
@@ -48,14 +51,35 @@ const ICONS = {
 
 export function useNavData() {
   const { t } = useTranslate();
-  const { dataProvided } = useDataContext();
+  const { data } = useQuery({
+    queryKey: ['links'],
+    queryFn: () => getData(`${api.get}/links`),
+  });
 
   const navigationItems = useMemo(
-    () => dataProvided,
-    [dataProvided]
+    () => data,
+    [data]
   );
 
-  const data = useMemo(
+  const listItems = useMemo(
+    () =>
+      navigationItems? navigationItems.map((item: any) => ({
+        title: t(item.name),
+        path: `${paths.dashboard.view.list}/${item.name}`,
+      })) : [],
+    [navigationItems, t]
+  );
+
+  const createItems = useMemo(
+    () =>
+      navigationItems? navigationItems.map((item: any) => ({
+        title: t(item.name),
+        path: `${paths.dashboard.create.new}/${item.name}`,
+      })): [],
+    [navigationItems, t]
+  );
+
+  const navData = useMemo(
     () => [
       // OVERVIEW
       // ----------------------------------------------------------------------
@@ -79,25 +103,19 @@ export function useNavData() {
             title: t("list"),
             path: paths.dashboard.view.root,
             icon: ICONS.file,
-            children: navigationItems.map((item) => ({
-              title: t(item.name),
-              path: `${paths.dashboard.view.list}/${item.id}`,
-            })),
+            children: listItems
           },
           {
             title: t("create"),
             path: paths.dashboard.create.root,
             icon: ICONS.banking,
-            children: navigationItems.map((item) => ({
-              title: t(item.name),
-              path: `${paths.dashboard.create.new}/${item.id}`,
-            })),
+            children: createItems
           },
         ],
       },
     ],
-    [t, navigationItems]
+    [t, listItems, createItems]
   );
 
-  return data;
+  return navData;
 }
