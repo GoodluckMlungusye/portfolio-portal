@@ -1,11 +1,6 @@
-import axiosInstance from "src/utils/axios";
+import axiosInstance from 'src/utils/axios';
 
-export const postData = async (endpoint: string, formData: FormData) => {
-    const response = await axiosInstance.post(endpoint, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    };
-    
+export const postData = async (endpoint: string, data: any) => {
+  const response = await axiosInstance.post(endpoint, data);
+  return response.data;
+};

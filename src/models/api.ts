@@ -1,4 +1,4 @@
 export type Link = {
-    id: number;
+    id?: number;
     name: string;
   };
