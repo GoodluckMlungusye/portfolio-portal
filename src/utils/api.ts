@@ -1,5 +1,6 @@
 export const api = {
     get: '/all',
+    post: '/new',
     client: {
       get: '/client/all',
       create: '/client/new',

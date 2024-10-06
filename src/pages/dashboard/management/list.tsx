@@ -12,7 +12,7 @@ import { ListView } from "src/sections/dashboard/management/list/view";
 export default function ListPage() {
   const params = useParams();
 
-  const { name } = params;
+  const { pathName } = params;
 
   return (
     <>
@@ -20,8 +20,8 @@ export default function ListPage() {
         <title> Management: List</title>
       </Helmet>
 
-      <DataProvider endpoint={`${name}`}>
-          <ListView name={`${name}`} />
+      <DataProvider endpoint={`${pathName}`}>
+          <ListView pathName={`${pathName}`} />
       </DataProvider>
     </>
   );

@@ -1,15 +1,16 @@
 // import { useMemo, useState, useEffect } from "react";
 
-import Container from "@mui/material/Container";
+import Container from '@mui/material/Container';
 
-import { paths } from "src/routes/paths";
+import { paths } from 'src/routes/paths';
 
-import { useGetProduct } from "src/api/product";
+import LinkForm from 'src/forms/link-form';
+import { useGetProduct } from 'src/api/product';
 
-import { useSettingsContext } from "src/components/settings";
-import CustomBreadcrumbs from "src/components/custom-breadcrumbs";
+import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import NewEditForm from "../../create/new-edit-form";
+import ObjectForm from '../../create/object-form';
 
 // ----------------------------------------------------------------------
 
@@ -43,13 +44,13 @@ export default function EditView({ id }: Props) {
   const { product: currentProduct } = useGetProduct(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : "lg"}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[
-          { name: "Dashboard", href: paths.dashboard.root },
+          { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: "Edit",
+            name: 'Edit',
             href: paths.dashboard.create.root,
           },
           { name: currentProduct?.name },
@@ -59,7 +60,9 @@ export default function EditView({ id }: Props) {
         }}
       />
 
-      <NewEditForm currentProduct={currentProduct} />
+      <ObjectForm currentProduct={currentProduct}>
+        <LinkForm />
+      </ObjectForm>
     </Container>
   );
 }

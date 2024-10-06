@@ -30,14 +30,15 @@ import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { TableNoData, TableSkeleton } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type Props = {
-  name: string;
+  pathName: string;
 };
 
-export default function ListView({ name }: Props) {
-  const { data } = useDataContext();
+export default function ListView({ pathName }: Props) {
+  const { data, loading } = useDataContext();
 
   // const router = useRouter();
   const confirm = useBoolean();
@@ -53,10 +54,7 @@ export default function ListView({ name }: Props) {
 
   let columns = generateColumns(data);
 
-  columns = [
-    ...columns,
-    { id: 'actions', label: 'Actions', align: 'left', minWidth: 100 },
-  ];
+  columns = [...columns, { id: 'actions', label: 'Actions', align: 'left', minWidth: 100 }];
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -74,18 +72,22 @@ export default function ListView({ name }: Props) {
   //   [router]
   // );
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(event.target.value.toLowerCase());
-      setPage(0);
-    };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value.toLowerCase());
+    setPage(0);
+  };
 
-    const filteredList = data.filter((row) => columns.some((column) => {
+  const filteredList = data.filter((row) =>
+    columns.some((column) => {
       const rowValue = row[column.id as keyof typeof row];
       if (rowValue) {
         return rowValue.toString().toLowerCase().includes(searchQuery);
       }
       return false;
-    }));
+    })
+  );
+
+  const notFound = filteredList.length < 1;
 
   const columnHeads = columns.map((column) => (
     <TableCell
@@ -97,28 +99,34 @@ export default function ListView({ name }: Props) {
     </TableCell>
   ));
 
-  const tableRows = filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
-    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-      {columns.map((column) => {
-        if (column.id === 'actions') {
-          return (
-            <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-              <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-                <Iconify icon="eva:more-vertical-fill" />
-              </IconButton>
-            </TableCell>
-          );
-        }
-        const rowIndex = column.id as keyof typeof row;
-        const value = row[rowIndex];
-        return (
-          <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
-            {value}
-          </TableCell>
-        );
-      })}
-    </TableRow>
-  ));
+  const tableRows =
+    filteredList.length > 0 ? (
+      filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
+        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+          {columns.map((column) => {
+            if (column.id === 'actions') {
+              return (
+                <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+                  <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+                    <Iconify icon="eva:more-vertical-fill" />
+                  </IconButton>
+                </TableCell>
+              );
+            }
+
+            const rowIndex = column.id as keyof typeof row;
+            const value = row[rowIndex];
+            return (
+              <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
+                {value}
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      ))
+    ) : (
+      <TableNoData notFound={notFound} />
+    );
 
   return (
     <>
@@ -127,17 +135,17 @@ export default function ListView({ name }: Props) {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: capitalize(name) },
+            { name: capitalize(pathName) },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={`${paths.dashboard.create.new}/${name}`}
+              href={`${paths.dashboard.create.new}/${pathName}`}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              {`New ${name}`}
+              {`New ${pathName}`}
             </Button>
           }
           sx={{
@@ -162,12 +170,16 @@ export default function ListView({ name }: Props) {
           />
 
           <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>{columnHeads}</TableRow>
-              </TableHead>
-              <TableBody>{tableRows}</TableBody>
-            </Table>
+            {loading ? (
+              <TableSkeleton />
+            ) : (
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>{columnHeads}</TableRow>
+                </TableHead>
+                <TableBody>{tableRows}</TableBody>
+              </Table>
+            )}
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}

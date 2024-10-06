@@ -1,23 +1,28 @@
-import Stack from '@mui/material/Stack';
+import { Box, Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import TableCell from '@mui/material/TableCell';
-import TableRow, { TableRowProps } from '@mui/material/TableRow';
 
 // ----------------------------------------------------------------------
 
-export default function TableSkeleton({ ...other }: TableRowProps) {
+export default function TableSkeleton() {
   return (
-    <TableRow {...other}>
-      <TableCell colSpan={12}>
-        <Stack spacing={3} direction="row" alignItems="center">
-          <Skeleton sx={{ borderRadius: 1.5, width: 48, height: 48, flexShrink: 0 }} />
-          <Skeleton sx={{ width: 1, height: 12 }} />
-          <Skeleton sx={{ width: 180, height: 12 }} />
-          <Skeleton sx={{ width: 160, height: 12 }} />
-          <Skeleton sx={{ width: 140, height: 12 }} />
-          <Skeleton sx={{ width: 120, height: 12 }} />
-        </Stack>
-      </TableCell>
-    </TableRow>
+    <Box sx={{ width: '100%',  px: 2 }}>
+      <Grid container spacing={2} mb={4}>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <Grid item xs={12} sm={2.4} key={index}>
+            <Skeleton height={30} width="100%" sx={{ borderRadius: 0.5 }}/>
+          </Grid>
+        ))}
+      </Grid>
+
+      {Array.from({ length: 5 }).map((_, rowIndex) => (
+        <Grid container spacing={2} mb={2} key={rowIndex}>
+          {Array.from({ length: 5 }).map((__, colIndex) => ( 
+            <Grid item xs={12} sm={2.4} key={colIndex}>
+              <Skeleton height={20} width="100%" sx={{ borderRadius: 0.5 }}/>
+            </Grid>
+          ))}
+        </Grid>
+      ))}
+    </Box>
   );
 }
