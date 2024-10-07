@@ -26,7 +26,7 @@ export default function CreateView({ pathName }: Props) {
   const renderForm = () => {
     switch (pathName) {
       case 'links':
-        return <LinkForm />;
+        return <LinkForm pathName={pathName}/>;
       default:
         return (
           <EmptyContent

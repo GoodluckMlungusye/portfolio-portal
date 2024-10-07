@@ -60,7 +60,7 @@ export default function EditView({ id }: Props) {
         }}
       />
 
-      <ObjectForm currentProduct={currentProduct}>
+      <ObjectForm currentObject={currentProduct}>
         <LinkForm />
       </ObjectForm>
     </Container>

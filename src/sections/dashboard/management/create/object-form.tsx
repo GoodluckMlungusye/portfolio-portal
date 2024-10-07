@@ -1,14 +1,12 @@
 import React, { ReactNode } from 'react';
 
-import { IProductItem } from 'src/types/product';
-
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentProduct?: IProductItem;
+  currentObject?: any;
   children: ReactNode;
 };
 
-export default function ObjectForm({ currentProduct, children }: Props) {
-  return <>{React.cloneElement(children as React.ReactElement<any>, { currentProduct })}</>;
+export default function ObjectForm({ currentObject, children }: Props) {
+  return <>{React.cloneElement(children as React.ReactElement<any>, { currentObject })}</>;
 }

@@ -25,13 +25,14 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 type Props = {
   currentObject?: Link;
+  pathName: string;
 };
 
-export default function LinkForm({ currentObject }: Props) {
-  const pathName = 'links';
+export default function LinkForm({ currentObject, pathName }: Props) {
+
   const router = useRouter();
 
-  const NewProductSchema = Yup.object().shape({
+  const NewLinkSchema = Yup.object().shape({
     name: Yup.string().required('Link name is required'),
   });
 
@@ -43,7 +44,7 @@ export default function LinkForm({ currentObject }: Props) {
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewProductSchema),
+    resolver: yupResolver(NewLinkSchema),
     defaultValues,
   });
 
