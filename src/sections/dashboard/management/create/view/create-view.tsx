@@ -7,6 +7,13 @@ import { RouterLink } from 'src/routes/components';
 import { capitalize } from 'src/utils/capitalize';
 
 import LinkForm from 'src/forms/link-form';
+import SkillForm from 'src/forms/skill-form';
+import ContactForm from 'src/forms/contact-form';
+import ExploreForm from 'src/forms/explore-form';
+import ProjectForm from 'src/forms/project-form';
+import ServiceForm from 'src/forms/service-form';
+import SubSkillForm from 'src/forms/sub-skill-form';
+import EducationForm from 'src/forms/education-form';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
@@ -26,7 +33,21 @@ export default function CreateView({ pathName }: Props) {
   const renderForm = () => {
     switch (pathName) {
       case 'links':
-        return <LinkForm pathName={pathName}/>;
+        return <LinkForm pathName={pathName} />;
+      case 'skills':
+        return <SkillForm pathName={pathName} />;
+      case 'contacts':
+        return <ContactForm pathName={pathName} />;
+      case 'explore':
+        return <ExploreForm pathName={pathName} />;
+      case 'projects':
+        return <ProjectForm pathName={pathName} />;
+      case 'services':
+        return <ServiceForm pathName={pathName} />;
+      case 'subskills':
+        return <SubSkillForm pathName={pathName} />;
+      case 'education':
+        return <EducationForm pathName={pathName} />;
       default:
         return (
           <EmptyContent

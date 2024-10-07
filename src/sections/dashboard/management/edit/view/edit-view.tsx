@@ -61,7 +61,7 @@ export default function EditView({ id }: Props) {
       />
 
       <ObjectForm currentObject={currentProduct}>
-        <LinkForm />
+        <LinkForm pathName='links'/>
       </ObjectForm>
     </Container>
   );

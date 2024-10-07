@@ -1,50 +1,46 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import { paths } from "src/routes/paths";
+import { paths } from 'src/routes/paths';
 
 import { api } from 'src/utils/api';
 
-import { useTranslate } from "src/locales";
+import { useTranslate } from 'src/locales';
 import { getData } from 'src/services/getService';
 
-import SvgColor from "src/components/svg-color";
-
+import SvgColor from 'src/components/svg-color';
 
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
-  <SvgColor
-    src={`/assets/icons/navbar/${name}.svg`}
-    sx={{ width: 1, height: 1 }}
-  />
+  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
 );
 
 const ICONS = {
-  job: icon("ic_job"),
-  blog: icon("ic_blog"),
-  chat: icon("ic_chat"),
-  mail: icon("ic_mail"),
-  user: icon("ic_user"),
-  file: icon("ic_file"),
-  lock: icon("ic_lock"),
-  tour: icon("ic_tour"),
-  order: icon("ic_order"),
-  label: icon("ic_label"),
-  blank: icon("ic_blank"),
-  kanban: icon("ic_kanban"),
-  folder: icon("ic_folder"),
-  banking: icon("ic_banking"),
-  booking: icon("ic_booking"),
-  invoice: icon("ic_invoice"),
-  product: icon("ic_product"),
-  calendar: icon("ic_calendar"),
-  disabled: icon("ic_disabled"),
-  external: icon("ic_external"),
-  menuItem: icon("ic_menu_item"),
-  ecommerce: icon("ic_ecommerce"),
-  analytics: icon("ic_analytics"),
-  dashboard: icon("ic_dashboard"),
+  job: icon('ic_job'),
+  blog: icon('ic_blog'),
+  chat: icon('ic_chat'),
+  mail: icon('ic_mail'),
+  user: icon('ic_user'),
+  file: icon('ic_file'),
+  lock: icon('ic_lock'),
+  tour: icon('ic_tour'),
+  order: icon('ic_order'),
+  label: icon('ic_label'),
+  blank: icon('ic_blank'),
+  kanban: icon('ic_kanban'),
+  folder: icon('ic_folder'),
+  banking: icon('ic_banking'),
+  booking: icon('ic_booking'),
+  invoice: icon('ic_invoice'),
+  product: icon('ic_product'),
+  calendar: icon('ic_calendar'),
+  disabled: icon('ic_disabled'),
+  external: icon('ic_external'),
+  menuItem: icon('ic_menu_item'),
+  ecommerce: icon('ic_ecommerce'),
+  analytics: icon('ic_analytics'),
+  dashboard: icon('ic_dashboard'),
 };
 
 // ----------------------------------------------------------------------
@@ -56,26 +52,33 @@ export function useNavData() {
     queryFn: () => getData(`${api.get}/links`),
   });
 
-  const navigationItems = useMemo(
-    () => data,
-    [data]
-  );
+  const navigationItems = useMemo(() => data, [data]);
 
   const listItems = useMemo(
     () =>
-      navigationItems? navigationItems.map((item: any) => ({
-        title: t(item.name),
-        path: `${paths.dashboard.view.list}/${item.name}`,
-      })) : [],
+      navigationItems
+        ? navigationItems
+            .filter((item: any) => item.name !== 'home' && item.name !== 'about')
+            .map((item: any) => ({
+              title: t(item.name),
+              path: `${paths.dashboard.view.list}/${item.name}`,
+            }))
+        : [],
     [navigationItems, t]
   );
 
   const createItems = useMemo(
     () =>
-      navigationItems? navigationItems.map((item: any) => ({
-        title: t(item.name),
-        path: `${paths.dashboard.create.new}/${item.name}`,
-      })): [],
+      navigationItems
+        ? navigationItems
+            .filter(
+              (item: any) => item.name !== 'home' && item.name !== 'about' && item.name !== 'clients'
+            )
+            .map((item: any) => ({
+              title: t(item.name),
+              path: `${paths.dashboard.create.new}/${item.name}`,
+            }))
+        : [],
     [navigationItems, t]
   );
 
@@ -84,10 +87,10 @@ export function useNavData() {
       // OVERVIEW
       // ----------------------------------------------------------------------
       {
-        subheader: t("overview"),
+        subheader: t('overview'),
         items: [
           {
-            title: t("dashboard"),
+            title: t('dashboard'),
             path: paths.dashboard.root,
             icon: ICONS.dashboard,
           },
@@ -97,19 +100,19 @@ export function useNavData() {
       // MANAGEMENT
       // ----------------------------------------------------------------------
       {
-        subheader: t("management"),
+        subheader: t('management'),
         items: [
           {
-            title: t("list"),
+            title: t('list'),
             path: paths.dashboard.view.root,
             icon: ICONS.file,
-            children: listItems
+            children: listItems,
           },
           {
-            title: t("create"),
+            title: t('create'),
             path: paths.dashboard.create.root,
             icon: ICONS.banking,
-            children: createItems
+            children: createItems,
           },
         ],
       },
