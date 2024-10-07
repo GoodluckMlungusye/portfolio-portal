@@ -1,4 +1,57 @@
 export type Link = {
-    id?: number;
-    name: string;
-  };
+  id?: number;
+  name: string;
+};
+
+export type Contact = {
+  id?: number;
+  medium: string;
+  contactLink: string;
+};
+
+export type Education = {
+  id?: number;
+  duration: string;
+  institute: string;
+  programme: string;
+  description: string;
+};
+
+export type Explore = {
+  id?: number;
+  counts: number;
+  description: string;
+  image: string;
+};
+
+export type Project = {
+  id?: number;
+  name: string;
+  technology: string;
+  rate: number;
+  projectLink: string;
+  colorCode: string;
+  image: string;
+  isHosted: boolean;
+};
+
+export type Service = {
+  id?: number;
+  name: string;
+  description: string;
+  image: string;
+};
+
+export type Skill = {
+  id?: number;
+  name: string;
+  subskills: number;
+};
+
+export type SubSkill = {
+  id?: number;
+  name: string;
+  percentageLevel: number;
+  skillClass: string;
+};
+
