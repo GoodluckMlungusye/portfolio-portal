@@ -77,7 +77,7 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
     },
     onError: (error) => {
       console.error('Error details:', error);
-      showSnackbar('Something went wrong. Please try again later.', 'error');
+      showSnackbar(error.message, 'error');
     },
   });
 

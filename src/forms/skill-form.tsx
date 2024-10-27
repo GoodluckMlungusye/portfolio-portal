@@ -32,16 +32,12 @@ export default function SkillForm({ currentObject, pathName }: Props) {
   const router = useRouter();
 
   const NewSkillSchema = Yup.object().shape({
-    name: Yup.string().required('Skill name is required'),
-    subskills: Yup.number()
-      .required('Subskills count is required')
-      .min(0, 'Subskills must be at least 0'),
+    name: Yup.string().required('Skill name is required')
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentObject?.name || '',
-      subskills: currentObject?.subskills || 0,
     }),
     [currentObject]
   );
@@ -77,7 +73,7 @@ export default function SkillForm({ currentObject, pathName }: Props) {
     },
     onError: (error) => {
       console.error('Error details:', error);
-      showSnackbar('Something went wrong. Please try again later.', 'error');
+      showSnackbar(error.message, 'error');
     },
   });
 
@@ -93,7 +89,6 @@ export default function SkillForm({ currentObject, pathName }: Props) {
             <Card>
               <Stack spacing={3} sx={{ p: 3 }}>
                 <RHFTextField name="name" label="Enter Skill Name" />
-                <RHFTextField name="subskills" label="Enter Subskills Count" type="number" />
               </Stack>
             </Card>
           </Grid>

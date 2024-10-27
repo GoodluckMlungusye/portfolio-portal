@@ -34,7 +34,7 @@ export default function ContactForm({ currentObject, pathName }: Props) {
 
   const NewContactSchema = Yup.object().shape({
     medium: Yup.string().required('Contact medium is required'),
-    contactLink: Yup.string().url('Invalid URL').required('Contact link is required'),
+    contactLink: Yup.string().required('Contact link is required'),
   });  
 
   const defaultValues = useMemo(
@@ -76,7 +76,7 @@ export default function ContactForm({ currentObject, pathName }: Props) {
     },
     onError: (error) => {
       console.error('Error details:', error);
-      showSnackbar('Something went wrong. Please try again later.', 'error');
+      showSnackbar(error.message, 'error');
     },
   });
 
@@ -91,7 +91,7 @@ export default function ContactForm({ currentObject, pathName }: Props) {
           <Grid xs={12}>
             <Card>
               <Stack spacing={3} sx={{ p: 3 }}>
-                <RHFTextField name="name" label="Enter Contact name" />
+                <RHFTextField name="medium" label="Enter contact medium" />
                 <RHFTextField name="contactLink" label="Enter contact link" />
               </Stack>
             </Card>

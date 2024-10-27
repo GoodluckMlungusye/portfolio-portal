@@ -21,7 +21,7 @@ export type Explore = {
   id?: number;
   counts: number;
   description: string;
-  image: string;
+  image: File | string | null;
 };
 
 export type Project = {
@@ -45,7 +45,6 @@ export type Service = {
 export type Skill = {
   id?: number;
   name: string;
-  subskills: number;
 };
 
 export type SubSkill = {
