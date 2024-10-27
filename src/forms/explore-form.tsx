@@ -77,10 +77,9 @@ export default function ExploreForm({ currentObject, pathName }: Props) {
         const formData = new FormData();
         formData.append('counts', data.counts.toString());
         formData.append('description', data.description);
-    // Ensure the image is appended with the correct name 'file'
-    if (data.image instanceof File) {
-      formData.append('file', data.image); // <-- Change here
-    }
+        if (data.image instanceof File) {
+          formData.append('file', data.image);
+        }
 
         return postFormData(`${api.post}/${pathName}`, formData);
       }
