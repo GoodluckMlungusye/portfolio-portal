@@ -101,7 +101,7 @@ export default function EducationForm({ currentObject, pathName }: Props) {
                   name="description"
                   label="Description"
                   multiline
-                  rows={4} // Adjust the number of rows based on expected input length
+                  rows={4}
                 />
               </Stack>
             </Card>

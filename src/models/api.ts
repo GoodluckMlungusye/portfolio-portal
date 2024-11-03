@@ -31,7 +31,7 @@ export type Project = {
   rate: number;
   projectLink: string;
   colorCode: string;
-  image: string;
+  image: File | string | null;
   isHosted: boolean;
 };
 
@@ -39,7 +39,7 @@ export type Service = {
   id?: number;
   name: string;
   description: string;
-  image: string;
+  image: File | string | null;
 };
 
 export type Skill = {
@@ -51,6 +51,9 @@ export type SubSkill = {
   id?: number;
   name: string;
   percentageLevel: number;
-  skillClass: string;
+  skill: {
+    id: number;
+  };
 };
+
 

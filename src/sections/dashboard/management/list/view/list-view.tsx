@@ -16,7 +16,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -100,33 +99,47 @@ export default function ListView({ pathName }: Props) {
   ));
 
   const tableRows =
-    filteredList.length > 0 ? (
-      filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
-        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-          {columns.map((column) => {
-            if (column.id === 'actions') {
-              return (
-                <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-                  <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-                    <Iconify icon="eva:more-vertical-fill" />
-                  </IconButton>
-                </TableCell>
-              );
-            }
-
-            const rowIndex = column.id as keyof typeof row;
-            const value = row[rowIndex];
+  filteredList.length > 0 ? (
+    filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
+      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+        {columns.map((column) => {
+          if (column.id === 'actions') {
             return (
-              <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
-                {value}
+              <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+                <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+                  <Iconify icon="eva:more-vertical-fill" />
+                </IconButton>
               </TableCell>
             );
-          })}
-        </TableRow>
-      ))
-    ) : (
-      <TableNoData notFound={notFound} />
-    );
+          }
+
+          const rowIndex = column.id as keyof typeof row;
+          const value = row[rowIndex];
+
+          let displayValue;
+
+          if (typeof value === 'boolean') {
+            displayValue = value ? (
+              <Iconify icon="eva:checkmark-circle-2-fill" sx={{ color: 'success.main' }} />
+            ) : (
+              <Iconify icon="eva:close-circle-fill" sx={{ color: 'error.main' }} />
+            );
+          } else {
+            displayValue = value;
+          }
+
+          return (
+            <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
+              {displayValue}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+    ))
+  ) : (
+    <TableNoData notFound={notFound} />
+  );
+
 
   return (
     <>

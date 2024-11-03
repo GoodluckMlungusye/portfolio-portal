@@ -53,33 +53,33 @@ export function useNavData() {
   });
 
   const navigationItems = useMemo(() => data, [data]);
+  const filteredItems = useMemo(() => ['home', 'about', 'skills', 'subskills'], []);
+  const filteredCreateItems = useMemo(() => ['home', 'about', 'clients'], []);
 
   const listItems = useMemo(
     () =>
       navigationItems
         ? navigationItems
-            .filter((item: any) => item.name !== 'home' && item.name !== 'about')
+            .filter((item: any) => !filteredItems.includes(item.name))
             .map((item: any) => ({
               title: t(item.name),
               path: `${paths.dashboard.view.list}/${item.name}`,
             }))
         : [],
-    [navigationItems, t]
+    [navigationItems, filteredItems,  t]
   );
-
+  
   const createItems = useMemo(
     () =>
       navigationItems
         ? navigationItems
-            .filter(
-              (item: any) => item.name !== 'home' && item.name !== 'about' && item.name !== 'clients'
-            )
+        .filter((item: any) => !filteredCreateItems.includes(item.name))
             .map((item: any) => ({
               title: t(item.name),
               path: `${paths.dashboard.create.new}/${item.name}`,
             }))
         : [],
-    [navigationItems, t]
+    [navigationItems,filteredCreateItems, t]
   );
 
   const navData = useMemo(

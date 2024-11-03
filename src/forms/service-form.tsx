@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
@@ -17,10 +18,10 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 import { api } from 'src/utils/api';
 
 import { Service } from 'src/models/api';
-import { postData } from 'src/services/postService';
+import { postData, postFormData } from 'src/services/postService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 type Props = {
@@ -34,7 +35,7 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
   const NewServiceSchema = Yup.object().shape({
     name: Yup.string().required('Service name is required'),
     description: Yup.string().required('Description is required'),
-    image: Yup.string().url('Invalid image URL').required('Image is required'),
+    image: Yup.mixed().nullable().notRequired(),
   });
 
   const defaultValues = useMemo(
@@ -53,9 +54,13 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
 
   const {
     reset,
+    watch,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const values = watch();
 
   const { snackbarOpen, snackbarMessage, snackbarSeverity, closeSnackbar, showSnackbar } =
     useSnackbar();
@@ -67,7 +72,20 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
   }, [currentObject, defaultValues, reset]);
 
   const { mutate } = useMutation({
-    mutationFn: (data: Service) => postData(`${api.post}/${pathName}`, data),
+    mutationFn: async (data: Service) => {
+      if (data.image instanceof File) {
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('description', data.description);
+        if (data.image instanceof File) {
+          formData.append('file', data.image);
+        }
+
+        return postFormData(`${api.post}/${pathName}`, formData);
+      }
+
+      return postData(`${api.post}/${pathName}`, data);
+    },
     onSuccess: () => {
       reset();
       showSnackbar(currentObject ? 'Update success!' : 'Create success!');
@@ -82,8 +100,36 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    mutate(data);
+    const processedData: Service = {
+      ...data,
+      image: typeof data.image === 'string' || data.image instanceof File ? data.image : null,
+    };
+
+    mutate(processedData);
   });
+
+  const handleDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        const newFile = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+
+        setValue('image', newFile, { shouldValidate: true });
+      }
+    },
+    [setValue]
+  );
+
+  const handleRemoveFile = useCallback(
+    (inputFile: File | string) => {
+      if (values.image === inputFile) {
+        setValue('image', null, { shouldValidate: true });
+      }
+    },
+    [setValue, values.image]
+  );
 
   return (
     <>
@@ -94,7 +140,17 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
               <Stack spacing={3} sx={{ p: 3 }}>
                 <RHFTextField name="name" label="Enter Service Name" />
                 <RHFTextField name="description" label="Enter Description" multiline rows={4} />
-                <RHFTextField name="image" label="Enter Image URL" />
+                <Stack spacing={1.5}>
+                  <Typography variant="body2">Image</Typography>
+                  <RHFUpload
+                    thumbnail
+                    name="image"
+                    maxSize={3145728}
+                    onDrop={handleDrop}
+                    onRemove={handleRemoveFile}
+                    onUpload={() => console.info('ON UPLOAD')}
+                  />
+                </Stack>
               </Stack>
             </Card>
           </Grid>

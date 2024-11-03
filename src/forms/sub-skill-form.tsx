@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useMemo, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -16,13 +16,13 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { SubSkill } from 'src/models/api';
+import { Skill, SubSkill } from 'src/models/api';
+import { getData } from 'src/services/getService';
 import { postData } from 'src/services/postService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-// ----------------------------------------------------------------------
 type Props = {
   currentObject?: SubSkill;
   pathName: string;
@@ -31,20 +31,25 @@ type Props = {
 export default function SubSkillForm({ currentObject, pathName }: Props) {
   const router = useRouter();
 
+  const { data: dropdownList } = useQuery({
+    queryKey: ["skills"],
+    queryFn: () => getData(`${api.get}/skills`),
+  });
+
   const NewSubSkillSchema = Yup.object().shape({
     name: Yup.string().required('Subskill name is required'),
     percentageLevel: Yup.number()
       .required('Percentage level is required')
       .min(0, 'Must be at least 0')
       .max(100, 'Must be at most 100'),
-    skillClass: Yup.string().required('Skill class is required'),
+    skillId: Yup.number().required('Skill is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentObject?.name || '',
       percentageLevel: currentObject?.percentageLevel || 0,
-      skillClass: currentObject?.skillClass || '',
+      skillId: currentObject?.skill?.id || 1,
     }),
     [currentObject]
   );
@@ -85,8 +90,18 @@ export default function SubSkillForm({ currentObject, pathName }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    mutate(data);
+    const { skillId, ...otherData } = data; 
+  
+    const formattedData = {
+      ...otherData,
+      skill: {
+        id: skillId,
+      },
+    };
+  
+    mutate(formattedData);
   });
+  
 
   return (
     <>
@@ -97,7 +112,18 @@ export default function SubSkillForm({ currentObject, pathName }: Props) {
               <Stack spacing={3} sx={{ p: 3 }}>
                 <RHFTextField name="name" label="Enter SubSkill Name" />
                 <RHFTextField name="percentageLevel" label="Enter Percentage Level" type="number" />
-                <RHFTextField name="skillClass" label="Enter Skill Class" />
+                <RHFSelect
+                  native
+                  name="skillId"
+                  label="Skill"
+                  InputLabelProps={{ shrink: true }}
+                >
+                  {dropdownList && dropdownList.map((item: Skill) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </RHFSelect>
               </Stack>
             </Card>
           </Grid>
