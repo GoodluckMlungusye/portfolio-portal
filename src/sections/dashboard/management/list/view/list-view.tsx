@@ -3,6 +3,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -39,7 +40,6 @@ type Props = {
 export default function ListView({ pathName }: Props) {
   const { data, loading } = useDataContext();
 
-  // const router = useRouter();
   const confirm = useBoolean();
   const popover = usePopover();
   const settings = useSettingsContext();
@@ -63,13 +63,6 @@ export default function ListView({ pathName }: Props) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  // const handleEditRow = React.useCallback(
-  //   (id: string) => {
-  //     router.push(paths.dashboard.create.edit(id));
-  //   },
-  //   [router]
-  // );
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -99,46 +92,60 @@ export default function ListView({ pathName }: Props) {
   ));
 
   const tableRows =
-  filteredList.length > 0 ? (
-    filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
-      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-        {columns.map((column) => {
-          if (column.id === 'actions') {
+    filteredList.length > 0 ? (
+      filteredList.slice(startPaginationRows, endPaginationRows).map((row) => (
+        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+          {columns.map((column) => {
+            if (column.id === 'actions') {
+              return (
+                <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+                  <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+                    <Iconify icon="eva:more-vertical-fill" />
+                  </IconButton>
+                </TableCell>
+              );
+            }
+
+            const rowIndex = column.id as keyof typeof row;
+            const value = row[rowIndex];
+
+            let displayValue;
+
+            if (typeof value === 'boolean') {
+              displayValue = value ? (
+                <Iconify icon="eva:checkmark-circle-2-fill" sx={{ color: 'success.main' }} />
+              ) : (
+                <Iconify icon="eva:close-circle-fill" sx={{ color: 'error.main' }} />
+              );
+            } else if (typeof value === 'string' && value.length > 50) {
+              displayValue = (
+                <Tooltip title={value} arrow>
+                  <span style={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: 'inline-block',
+                    maxWidth: 200,
+                  }}>
+                    {value}
+                  </span>
+                </Tooltip>
+              );
+            } else {
+              displayValue = value;
+            }
+
             return (
-              <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-                <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-                  <Iconify icon="eva:more-vertical-fill" />
-                </IconButton>
+              <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
+                {displayValue}
               </TableCell>
             );
-          }
-
-          const rowIndex = column.id as keyof typeof row;
-          const value = row[rowIndex];
-
-          let displayValue;
-
-          if (typeof value === 'boolean') {
-            displayValue = value ? (
-              <Iconify icon="eva:checkmark-circle-2-fill" sx={{ color: 'success.main' }} />
-            ) : (
-              <Iconify icon="eva:close-circle-fill" sx={{ color: 'error.main' }} />
-            );
-          } else {
-            displayValue = value;
-          }
-
-          return (
-            <TableCell key={column.id} align={column.align} style={{ width: '50%' }}>
-              {displayValue}
-            </TableCell>
-          );
-        })}
-      </TableRow>
-    ))
-  ) : (
-    <TableNoData notFound={notFound} />
-  );
+          })}
+        </TableRow>
+      ))
+    ) : (
+      <TableNoData notFound={notFound} />
+    );
 
 
   return (
