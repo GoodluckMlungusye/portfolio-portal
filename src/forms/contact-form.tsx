@@ -53,7 +53,6 @@ export default function ContactForm({ currentObject, pathName }: Props) {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
   const { snackbarOpen, snackbarMessage, snackbarSeverity, closeSnackbar, showSnackbar } =
@@ -65,7 +64,7 @@ export default function ContactForm({ currentObject, pathName }: Props) {
     }
   }, [currentObject, defaultValues, reset]);
 
-  const { mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: (data: Contact) => postData(`${api.post}/${pathName}`, data),
     onSuccess: () => {
       reset();
@@ -106,7 +105,7 @@ export default function ContactForm({ currentObject, pathName }: Props) {
               pt: 2,
             }}
           >
-            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+            <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
               {!currentObject ? 'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>

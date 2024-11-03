@@ -13,7 +13,6 @@ import ExploreForm from 'src/forms/explore-form';
 import ProjectForm from 'src/forms/project-form';
 import ServiceForm from 'src/forms/service-form';
 import SubSkillForm from 'src/forms/sub-skill-form';
-import EducationForm from 'src/forms/education-form';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
@@ -46,8 +45,6 @@ export default function CreateView({ pathName }: Props) {
         return <ServiceForm pathName={pathName} />;
       case 'subskills':
         return <SubSkillForm pathName={pathName} />;
-      case 'education':
-        return <EducationForm pathName={pathName} />;
       default:
         return (
           <EmptyContent

@@ -9,14 +9,6 @@ export type Contact = {
   contactLink: string;
 };
 
-export type Education = {
-  id?: number;
-  duration: string;
-  institute: string;
-  programme: string;
-  description: string;
-};
-
 export type Explore = {
   id?: number;
   counts: number;

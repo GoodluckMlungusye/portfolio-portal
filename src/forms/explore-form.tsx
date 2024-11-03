@@ -56,8 +56,7 @@ export default function ExploreForm({ currentObject, pathName }: Props) {
     reset,
     watch,
     setValue,
-    handleSubmit,
-    formState: { isSubmitting },
+    handleSubmit
   } = methods;
 
   const values = watch();
@@ -71,7 +70,7 @@ export default function ExploreForm({ currentObject, pathName }: Props) {
     }
   }, [currentObject, defaultValues, reset]);
 
-  const { mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: async (data: Explore) => {
       if (data.image instanceof File) {
         const formData = new FormData();
@@ -165,7 +164,7 @@ export default function ExploreForm({ currentObject, pathName }: Props) {
               pt: 2,
             }}
           >
-            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+            <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
               {!currentObject ? 'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>
