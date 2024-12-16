@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -38,6 +39,7 @@ type Props = {
 };
 
 export default function ListView({ pathName }: Props) {
+  const navigate = useNavigate();
   const { data, loading } = useDataContext();
 
   const confirm = useBoolean();
@@ -47,6 +49,7 @@ export default function ListView({ pathName }: Props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [selectedRow, setSelectedRow] = React.useState<any | null>(null);
 
   const startPaginationRows = page * rowsPerPage;
   const endPaginationRows = startPaginationRows + rowsPerPage;
@@ -54,6 +57,12 @@ export default function ListView({ pathName }: Props) {
   let columns = generateColumns(data);
 
   columns = [...columns, { id: 'actions', label: 'Actions', align: 'left', minWidth: 100 }];
+
+  const handleEditRow = () => {
+    if (selectedRow) {
+      navigate(`${paths.dashboard.create.new}/${pathName}`, { state: { rowData: selectedRow } });
+    }
+  };  
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -99,7 +108,13 @@ export default function ListView({ pathName }: Props) {
             if (column.id === 'actions') {
               return (
                 <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-                  <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+                  <IconButton
+                    color={popover.open ? 'inherit' : 'default'}
+                    onClick={(event) => {
+                      setSelectedRow(row);
+                      popover.onOpen(event);
+                    }}
+                  >
                     <Iconify icon="eva:more-vertical-fill" />
                   </IconButton>
                 </TableCell>
@@ -120,13 +135,15 @@ export default function ListView({ pathName }: Props) {
             } else if (typeof value === 'string' && value.length > 50) {
               displayValue = (
                 <Tooltip title={value} arrow>
-                  <span style={{
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    display: 'inline-block',
-                    maxWidth: 200,
-                  }}>
+                  <span
+                    style={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: 'inline-block',
+                      maxWidth: 200,
+                    }}
+                  >
                     {value}
                   </span>
                 </Tooltip>
@@ -232,7 +249,7 @@ export default function ListView({ pathName }: Props) {
 
         <MenuItem
           onClick={() => {
-            // handleEditRow();
+            handleEditRow();
             popover.onClose();
           }}
         >
