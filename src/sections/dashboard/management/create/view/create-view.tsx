@@ -24,28 +24,27 @@ import ObjectForm from '../object-form';
 
 type Props = {
   pathName: string;
-  currentObject?: any;
 };
 
-export default function CreateView({ pathName, currentObject }: Props) {
+export default function CreateView({ pathName }: Props) {
   const settings = useSettingsContext();
-
+  
   const renderForm = () => {
     switch (pathName) {
       case 'links':
-        return <LinkForm pathName={pathName} currentObject={currentObject}/>;
+        return <LinkForm pathName={pathName} />;
       case 'skills':
-        return <SkillForm pathName={pathName} currentObject={currentObject}/>;
+        return <SkillForm pathName={pathName} />;
       case 'contacts':
-        return <ContactForm pathName={pathName} currentObject={currentObject}/>;
+        return <ContactForm pathName={pathName} />;
       case 'explore':
-        return <ExploreForm pathName={pathName} currentObject={currentObject}/>;
+        return <ExploreForm pathName={pathName} />;
       case 'projects':
-        return <ProjectForm pathName={pathName} currentObject={currentObject}/>;
+        return <ProjectForm pathName={pathName} />;
       case 'services':
-        return <ServiceForm pathName={pathName} currentObject={currentObject}/>;
+        return <ServiceForm pathName={pathName} />;
       case 'subskills':
-        return <SubSkillForm pathName={pathName} currentObject={currentObject}/>;
+        return <SubSkillForm pathName={pathName} />;
       default:
         return (
           <EmptyContent
@@ -79,8 +78,9 @@ export default function CreateView({ pathName, currentObject }: Props) {
           mb: { xs: 3, md: 5 },
         }}
       />
-
+     
       <ObjectForm>{renderForm()}</ObjectForm>
+      
     </Container>
   );
 }

@@ -26,6 +26,7 @@ import { capitalize } from 'src/utils/capitalize';
 import { generateColumns } from 'src/utils/generate-columns';
 
 import { useDataContext } from 'src/contexts/data-context';
+import { RowObject, useRowContext } from 'src/contexts/row-context';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -41,6 +42,7 @@ type Props = {
 export default function ListView({ pathName }: Props) {
   const navigate = useNavigate();
   const { data, loading } = useDataContext();
+  const { updateRow } = useRowContext();
 
   const confirm = useBoolean();
   const popover = usePopover();
@@ -49,7 +51,7 @@ export default function ListView({ pathName }: Props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [selectedRow, setSelectedRow] = React.useState<any | null>(null);
+  const [activeRow, setActiveRow] = React.useState<RowObject | null>(null);
 
   const startPaginationRows = page * rowsPerPage;
   const endPaginationRows = startPaginationRows + rowsPerPage;
@@ -59,11 +61,17 @@ export default function ListView({ pathName }: Props) {
   columns = [...columns, { id: 'actions', label: 'Actions', align: 'left', minWidth: 100 }];
 
   const handleEditRow = () => {
-    if (selectedRow) {
-      navigate(`${paths.dashboard.create.new}/${pathName}`, { state: { rowData: selectedRow } });
+    if (activeRow) {
+      updateRow(activeRow); 
+      navigate(`${paths.dashboard.create.new}/${pathName}`);
     }
-  };  
+  };
 
+  const getRow = (event: React.MouseEvent<HTMLElement>, row: RowObject) => {
+    setActiveRow(row); 
+    popover.onOpen(event);
+  };
+  
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -110,10 +118,7 @@ export default function ListView({ pathName }: Props) {
                 <TableCell key={column.id} align="left" sx={{ px: 1, whiteSpace: 'nowrap' }}>
                   <IconButton
                     color={popover.open ? 'inherit' : 'default'}
-                    onClick={(event) => {
-                      setSelectedRow(row);
-                      popover.onOpen(event);
-                    }}
+                    onClick={(event) => getRow(event, row)}
                   >
                     <Iconify icon="eva:more-vertical-fill" />
                   </IconButton>

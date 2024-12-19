@@ -2,7 +2,9 @@ import { lazy, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 // import { AuthGuard } from 'src/auth/guard';
+
 import DashboardLayout from "src/layouts/dashboard";
+import { RowProvider } from "src/contexts/row-context";
 
 import { LoadingScreen } from "src/components/loading-screen";
 
@@ -11,7 +13,6 @@ import { LoadingScreen } from "src/components/loading-screen";
 const IndexPage = lazy(() => import("src/pages/dashboard/overview/app"));
 const CreatePage = lazy(() => import("src/pages/dashboard/management/create"));
 const ListPage = lazy(() => import("src/pages/dashboard/management/list"));
-const EditPage = lazy(() => import("src/pages/dashboard/management/edit"));
 
 // USER
 const UserProfilePage = lazy(() => import("src/pages/user/profile"));
@@ -27,7 +28,9 @@ export const dashboardRoutes = [
     element: (
       <DashboardLayout>
         <Suspense fallback={<LoadingScreen />}>
-          <Outlet />
+          <RowProvider>
+            <Outlet />
+          </RowProvider>
         </Suspense>
       </DashboardLayout>
     ),
@@ -41,7 +44,6 @@ export const dashboardRoutes = [
         path: "create",
         children: [
           { path: "new/:pathName", element: <CreatePage /> },
-          { path: ":id/edit", element: <EditPage /> },
         ],
       },
       {

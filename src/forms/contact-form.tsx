@@ -18,6 +18,7 @@ import { api } from 'src/utils/api';
 
 import { Contact } from 'src/models/api';
 import { postData } from 'src/services/postService';
+import { useRowContext } from 'src/contexts/row-context';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -31,7 +32,8 @@ type Props = {
 export default function ContactForm({ currentObject, pathName }: Props) {
 
   const router = useRouter();
-
+  const { row } = useRowContext();
+  console.log(row);
   const NewContactSchema = Yup.object().shape({
     medium: Yup.string().required('Contact medium is required'),
     contactLink: Yup.string().required('Contact link is required'),
