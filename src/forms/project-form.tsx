@@ -19,19 +19,22 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Project } from 'src/models/api';
+import { Project, RowObject  } from 'src/models/api';
+import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 type Props = {
-  currentObject?: Project;
   pathName: string;
 };
 
-export default function ProjectForm({ currentObject, pathName }: Props) {
+export default function ProjectForm({ pathName }: Props) {
+
   const router = useRouter();
+  const { row } = useRowContext();
+  const currentObject: RowObject | null = row;
 
   const NewProjectSchema = Yup.object().shape({
     name: Yup.string().required('Project name is required'),
@@ -45,18 +48,42 @@ export default function ProjectForm({ currentObject, pathName }: Props) {
     isHosted: Yup.boolean().required('Hosted status is required'),
   });
 
-  const defaultValues = useMemo(
-    () => ({
-      name: currentObject?.name || '',
-      technology: currentObject?.technology || '',
-      rate: currentObject?.rate || 0,
-      projectLink: currentObject?.projectLink || '',
-      colorCode: currentObject?.colorCode || '',
-      image: currentObject?.image || '',
-      isHosted: currentObject?.isHosted || false,
-    }),
-    [currentObject]
-  );
+  function isProject(obj: RowObject | null): obj is Project {
+    return (
+      !!obj &&
+      'name' in obj &&
+      'technology' in obj &&
+      'rate' in obj &&
+      'projectLink' in obj &&
+      'colorCode' in obj &&
+      'isHosted' in obj &&
+      'image' in obj
+    );
+  }
+
+  const defaultValues = useMemo(() => {
+    if (isProject(currentObject)) {
+      return {
+        name: currentObject.name || '',
+        technology: currentObject.technology || '',
+        rate: currentObject.rate || 0,
+        projectLink: currentObject.projectLink || '',
+        colorCode: currentObject.colorCode || '',
+        image: currentObject.image || null,
+        isHosted: currentObject.isHosted || false,
+      };
+    }
+  
+    return {
+      name: '',
+      technology: '',
+      rate: 0,
+      projectLink: '',
+      colorCode: '',
+      image: null,
+      isHosted: false,
+    };
+  }, [currentObject]);
 
   const methods = useForm({
     resolver: yupResolver(NewProjectSchema),

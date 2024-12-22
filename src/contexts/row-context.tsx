@@ -1,6 +1,6 @@
 import React, { useMemo, useState, ReactNode, useContext , useCallback, createContext } from 'react';
 
-export type RowObject = Record<string, any>;
+import { RowObject } from 'src/models/api';
 
 interface RowContextType {
   row: RowObject | null;

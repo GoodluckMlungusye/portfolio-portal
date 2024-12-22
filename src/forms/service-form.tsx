@@ -17,7 +17,8 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Service } from 'src/models/api';
+import { Service, RowObject } from 'src/models/api';
+import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
@@ -25,12 +26,14 @@ import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form'
 
 // ----------------------------------------------------------------------
 type Props = {
-  currentObject?: Service;
   pathName: string;
 };
 
-export default function ServiceForm({ currentObject, pathName }: Props) {
+export default function ServiceForm({ pathName }: Props) {
+
   const router = useRouter();
+  const { row } = useRowContext();
+  const currentObject: RowObject | null = row;
 
   const NewServiceSchema = Yup.object().shape({
     name: Yup.string().required('Service name is required'),
@@ -38,15 +41,26 @@ export default function ServiceForm({ currentObject, pathName }: Props) {
     image: Yup.mixed().nullable().notRequired(),
   });
 
-  const defaultValues = useMemo(
-    () => ({
-      name: currentObject?.name || '',
-      description: currentObject?.description || '',
-      image: currentObject?.image || '',
-    }),
-    [currentObject]
-  );
-
+  const defaultValues = useMemo(() => {
+    if (isService(currentObject)) {
+      return {
+        name: currentObject.name || '',
+        description: currentObject.description || '',
+        image: currentObject.image || null,
+      };
+    }
+  
+    return {
+      name: '',
+      description: '',
+      image: null,
+    };
+  }, [currentObject]);
+  
+  function isService(obj: RowObject | null): obj is Service {
+    return !!obj && 'name' in obj && 'description' in obj && 'image' in obj;
+  }
+  
   const methods = useForm({
     resolver: yupResolver(NewServiceSchema),
     defaultValues,

@@ -48,4 +48,6 @@ export type SubSkill = {
   };
 };
 
+export type RowObject = Link | Contact | Explore | Project | Service | Skill | SubSkill;
+
 

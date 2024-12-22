@@ -25,8 +25,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { capitalize } from 'src/utils/capitalize';
 import { generateColumns } from 'src/utils/generate-columns';
 
+import { RowObject } from 'src/models/api';
+import { useRowContext } from 'src/contexts/row-context';
 import { useDataContext } from 'src/contexts/data-context';
-import { RowObject, useRowContext } from 'src/contexts/row-context';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';

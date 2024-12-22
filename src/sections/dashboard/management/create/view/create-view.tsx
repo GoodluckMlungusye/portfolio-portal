@@ -6,7 +6,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { capitalize } from 'src/utils/capitalize';
 
-import LinkForm from 'src/forms/link-form';
 import SkillForm from 'src/forms/skill-form';
 import ContactForm from 'src/forms/contact-form';
 import ExploreForm from 'src/forms/explore-form';
@@ -31,8 +30,6 @@ export default function CreateView({ pathName }: Props) {
   
   const renderForm = () => {
     switch (pathName) {
-      case 'links':
-        return <LinkForm pathName={pathName} />;
       case 'skills':
         return <SkillForm pathName={pathName} />;
       case 'contacts':

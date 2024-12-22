@@ -17,7 +17,8 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Explore } from 'src/models/api';
+import { Explore, RowObject } from 'src/models/api';
+import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
@@ -25,12 +26,14 @@ import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form'
 
 // ----------------------------------------------------------------------
 type Props = {
-  currentObject?: Explore;
   pathName: string;
 };
 
-export default function ExploreForm({ currentObject, pathName }: Props) {
+export default function ExploreForm({ pathName }: Props) {
+
   const router = useRouter();
+  const { row } = useRowContext();
+  const currentObject: RowObject | null = row;
 
   const NewExploreSchema = Yup.object().shape({
     counts: Yup.number().moreThan(0, 'Counts must be at least 0'),
@@ -38,14 +41,25 @@ export default function ExploreForm({ currentObject, pathName }: Props) {
     image: Yup.mixed().nullable().notRequired(),
   });
 
-  const defaultValues = useMemo(
-    () => ({
-      counts: currentObject?.counts || 0,
-      description: currentObject?.description || '',
-      image: currentObject?.image || '',
-    }),
-    [currentObject]
-  );
+  function isExplore(obj: RowObject | null): obj is Explore {
+    return !!obj && 'counts' in obj && 'description' in obj && 'image' in obj;
+  }
+
+  const defaultValues = useMemo(() => {
+    if (isExplore(currentObject)) {
+      return {
+        counts: currentObject.counts || 0,
+        description: currentObject.description || '',
+        image: currentObject.image || null,
+      };
+    }
+  
+    return {
+      counts: 0,
+      description: '',
+      image: null,
+    };
+  }, [currentObject]);
 
   const methods = useForm({
     resolver: yupResolver(NewExploreSchema),
@@ -76,9 +90,7 @@ export default function ExploreForm({ currentObject, pathName }: Props) {
         const formData = new FormData();
         formData.append('counts', data.counts.toString());
         formData.append('description', data.description);
-        if (data.image instanceof File) {
-          formData.append('file', data.image);
-        }
+        formData.append('file', data.image);
 
         return postFormData(`${api.post}/${pathName}`, formData);
       }

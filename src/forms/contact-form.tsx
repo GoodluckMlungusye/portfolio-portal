@@ -16,7 +16,7 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Contact } from 'src/models/api';
+import { Contact, RowObject } from 'src/models/api';
 import { postData } from 'src/services/postService';
 import { useRowContext } from 'src/contexts/row-context';
 
@@ -25,27 +25,36 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 type Props = {
-  currentObject?: Contact;
   pathName: string;
 };
 
-export default function ContactForm({ currentObject, pathName }: Props) {
+export default function ContactForm({ pathName }: Props) {
 
   const router = useRouter();
   const { row } = useRowContext();
-  console.log(row);
+  const currentObject: RowObject | null = row;
+ 
   const NewContactSchema = Yup.object().shape({
     medium: Yup.string().required('Contact medium is required'),
     contactLink: Yup.string().required('Contact link is required'),
   });  
 
-  const defaultValues = useMemo(
-    () => ({
-      medium: currentObject?.medium || '',
-      contactLink: currentObject?.contactLink || '',
-    }),
-    [currentObject]
-  );  
+  function isContact(obj: RowObject | null): obj is Contact {
+    return !!obj && 'medium' in obj && 'contactLink' in obj;
+  } 
+  
+  const defaultValues = useMemo(() => {
+    if (isContact(currentObject)) {
+      return {
+        medium: currentObject.medium || '',
+        contactLink: currentObject.contactLink || '',
+      };
+    }
+    return {
+      medium: '',
+      contactLink: '',
+    };
+  }, [currentObject]);
 
   const methods = useForm({
     resolver: yupResolver(NewContactSchema),
