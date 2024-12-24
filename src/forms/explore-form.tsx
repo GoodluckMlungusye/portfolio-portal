@@ -17,9 +17,10 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Explore, RowObject } from 'src/models/api';
+import { Explore } from 'src/models/api';
 import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
+import { updateData, updateFormData } from 'src/services/updateService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
@@ -30,10 +31,9 @@ type Props = {
 };
 
 export default function ExploreForm({ pathName }: Props) {
-
   const router = useRouter();
   const { row } = useRowContext();
-  const currentObject: RowObject | null = row;
+  const currentObject = useMemo(() => (row as Explore) || { counts: 0, description: '', image: null }, [row]);
 
   const NewExploreSchema = Yup.object().shape({
     counts: Yup.number().moreThan(0, 'Counts must be at least 0'),
@@ -41,37 +41,21 @@ export default function ExploreForm({ pathName }: Props) {
     image: Yup.mixed().nullable().notRequired(),
   });
 
-  function isExplore(obj: RowObject | null): obj is Explore {
-    return !!obj && 'counts' in obj && 'description' in obj && 'image' in obj;
-  }
-
-  const defaultValues = useMemo(() => {
-    if (isExplore(currentObject)) {
-      return {
-        counts: currentObject.counts || 0,
-        description: currentObject.description || '',
-        image: currentObject.image || null,
-      };
-    }
-  
-    return {
-      counts: 0,
-      description: '',
-      image: null,
-    };
-  }, [currentObject]);
+  const defaultValues = useMemo(
+    () => ({
+      counts: currentObject.counts || 0,
+      description: currentObject.description || '',
+      image: currentObject.image || null,
+    }),
+    [currentObject]
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewExploreSchema),
     defaultValues,
   });
 
-  const {
-    reset,
-    watch,
-    setValue,
-    handleSubmit
-  } = methods;
+  const { reset, watch, setValue, handleSubmit } = methods;
 
   const values = watch();
 
@@ -92,14 +76,14 @@ export default function ExploreForm({ pathName }: Props) {
         formData.append('description', data.description);
         formData.append('file', data.image);
 
-        return postFormData(`${api.post}/${pathName}`, formData);
+        return currentObject.id? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData) : postFormData(`${api.post}/${pathName}`, formData);
       }
 
-      return postData(`${api.post}/${pathName}`, data);
+      return  currentObject.id? updateData(`${api.update}/${pathName}`, currentObject.id, data) : postData(`${api.post}/${pathName}`, data);
     },
     onSuccess: () => {
       reset();
-      showSnackbar(currentObject ? 'Update success!' : 'Create success!');
+      showSnackbar(currentObject.id ? 'Update success!' : 'Create success!');
       setTimeout(() => {
         router.push(`${paths.dashboard.view.list}/${pathName}`);
       }, 3000);
@@ -177,7 +161,7 @@ export default function ExploreForm({ pathName }: Props) {
             }}
           >
             <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
-              {!currentObject ? 'Create' : 'Save Changes'}
+              {!currentObject.id ? 'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>
         </Grid>

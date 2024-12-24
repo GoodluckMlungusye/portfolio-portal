@@ -1,5 +1,4 @@
 import isEqual from "lodash/isEqual";
-import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState, useEffect, useCallback } from "react";
 
 import Tab from "@mui/material/Tab";
@@ -18,9 +17,6 @@ import { RouterLink } from "src/routes/components";
 
 import { useBoolean } from "src/hooks/use-boolean";
 
-import { api } from 'src/utils/api';
-
-import { getData } from 'src/services/getService';
 import { _userList, USER_STATUS_OPTIONS } from "src/_mock";
 
 import Label from "src/components/label";
@@ -75,11 +71,6 @@ export default function ListView({ index }: Props) {
   const [dashboardTitle, setDashboardTitle] = useState("");
   const [dashboardIndex, setDashboardIndex] = useState(0);
 
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['testData'],
-    queryFn: () => getData(api.link.get),
-  });
-
   const managementList = useMemo(
     () => [
       { title: "Projects", id: 1 },
@@ -93,10 +84,6 @@ export default function ListView({ index }: Props) {
   );
 
   const hasStatus = false;
-
-  console.log("LOADING: ", isLoading);
-  console.log("ERROR: ", error);
-  console.log("DATA: ", data);
 
   useEffect(() => {
     const foundItem = managementList.find((item) => item.id === Number(index));
@@ -195,14 +182,6 @@ export default function ListView({ index }: Props) {
     },
     [handleFilters]
   );
-  
-  // if (isLoading) {
-  //   return <>Loading data...</>;
-  // }
-
-  // if (error) {
-  //   return <>Error fetching data: {error.message}</>;
-  // }
 
   return (
     <>

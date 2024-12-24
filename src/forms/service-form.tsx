@@ -17,9 +17,10 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Service, RowObject } from 'src/models/api';
+import { Service } from 'src/models/api';
 import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
+import { updateData, updateFormData } from 'src/services/updateService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
@@ -33,7 +34,8 @@ export default function ServiceForm({ pathName }: Props) {
 
   const router = useRouter();
   const { row } = useRowContext();
-  const currentObject: RowObject | null = row;
+  const currentObject = useMemo(() => (row as Service) || { name: '', description: '', image: null }, [row]);
+  
 
   const NewServiceSchema = Yup.object().shape({
     name: Yup.string().required('Service name is required'),
@@ -41,25 +43,14 @@ export default function ServiceForm({ pathName }: Props) {
     image: Yup.mixed().nullable().notRequired(),
   });
 
-  const defaultValues = useMemo(() => {
-    if (isService(currentObject)) {
-      return {
-        name: currentObject.name || '',
-        description: currentObject.description || '',
-        image: currentObject.image || null,
-      };
-    }
-  
-    return {
-      name: '',
-      description: '',
-      image: null,
-    };
-  }, [currentObject]);
-  
-  function isService(obj: RowObject | null): obj is Service {
-    return !!obj && 'name' in obj && 'description' in obj && 'image' in obj;
-  }
+  const defaultValues = useMemo(
+    () => ({
+      name: currentObject.name || '',
+      description: currentObject.description || '',
+      image: currentObject.image || null,
+    }),
+    [currentObject]
+  );
   
   const methods = useForm({
     resolver: yupResolver(NewServiceSchema),
@@ -94,10 +85,10 @@ export default function ServiceForm({ pathName }: Props) {
           formData.append('file', data.image);
         }
 
-        return postFormData(`${api.post}/${pathName}`, formData);
+        return currentObject.id? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData) : postFormData(`${api.post}/${pathName}`, formData);
       }
 
-      return postData(`${api.post}/${pathName}`, data);
+      return  currentObject.id? updateData(`${api.update}/${pathName}`, currentObject.id, data) : postData(`${api.post}/${pathName}`, data);
     },
     onSuccess: () => {
       reset();

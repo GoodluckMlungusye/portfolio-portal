@@ -21,7 +21,7 @@ export type Project = {
   name: string;
   technology: string;
   rate: number;
-  projectLink: string;
+  repository: string;
   colorCode: string;
   image: File | string | null;
   isHosted: boolean;
@@ -48,6 +48,6 @@ export type SubSkill = {
   };
 };
 
-export type RowObject = Link | Contact | Explore | Project | Service | Skill | SubSkill;
+export type RowObject = Record<string,unknown>;
 
 

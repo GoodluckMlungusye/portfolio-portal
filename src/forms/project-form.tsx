@@ -19,9 +19,10 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Project, RowObject  } from 'src/models/api';
+import { Project } from 'src/models/api';
 import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
+import { updateData, updateFormData } from 'src/services/updateService';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
@@ -34,13 +35,14 @@ export default function ProjectForm({ pathName }: Props) {
 
   const router = useRouter();
   const { row } = useRowContext();
-  const currentObject: RowObject | null = row;
+  const currentObject = useMemo(() => (row as Project) || 
+  { name: '', technology: '', rate: 1, repository: '', colorCode: '', image: null, isHosted: false }, [row]);
 
   const NewProjectSchema = Yup.object().shape({
     name: Yup.string().required('Project name is required'),
     technology: Yup.string().required('Technology is required'),
     rate: Yup.number().required('Rate is required').min(0, 'Rate must be at least 0'),
-    projectLink: Yup.string().url('Invalid project URL').required('Project link is required'),
+    repository: Yup.string().url('Invalid project URL').required('Repository URL is required'),
     colorCode: Yup.string()
       .matches(/^#[0-9A-F]{6}$/i, 'Invalid color code')
       .required('Color code is required'),
@@ -48,42 +50,20 @@ export default function ProjectForm({ pathName }: Props) {
     isHosted: Yup.boolean().required('Hosted status is required'),
   });
 
-  function isProject(obj: RowObject | null): obj is Project {
-    return (
-      !!obj &&
-      'name' in obj &&
-      'technology' in obj &&
-      'rate' in obj &&
-      'projectLink' in obj &&
-      'colorCode' in obj &&
-      'isHosted' in obj &&
-      'image' in obj
-    );
-  }
 
-  const defaultValues = useMemo(() => {
-    if (isProject(currentObject)) {
-      return {
-        name: currentObject.name || '',
-        technology: currentObject.technology || '',
-        rate: currentObject.rate || 0,
-        projectLink: currentObject.projectLink || '',
-        colorCode: currentObject.colorCode || '',
-        image: currentObject.image || null,
-        isHosted: currentObject.isHosted || false,
-      };
-    }
-  
-    return {
-      name: '',
-      technology: '',
-      rate: 0,
-      projectLink: '',
-      colorCode: '',
-      image: null,
-      isHosted: false,
-    };
-  }, [currentObject]);
+  const defaultValues = useMemo(
+    () => ({
+      name: currentObject.name || '',
+      technology: currentObject.technology || '',
+      rate: currentObject.rate || 0,
+      repository: currentObject.repository || '',
+      colorCode: currentObject.colorCode || '',
+      image: currentObject.image || null,
+      isHosted: currentObject.isHosted || false,
+    }),
+    [currentObject]
+  );
+
 
   const methods = useForm({
     resolver: yupResolver(NewProjectSchema),
@@ -114,18 +94,18 @@ export default function ProjectForm({ pathName }: Props) {
         formData.append('name', data.name);
         formData.append('technology', data.technology);
         formData.append('rate', data.rate.toString());
-        formData.append('projectLink', data.projectLink);
+        formData.append('repository', data.repository);
         formData.append('colorCode', data.colorCode);
         formData.append('isHosted', data.isHosted.toString());
         formData.append('file', data.image);
 
-        return postFormData(`${api.post}/${pathName}`, formData);
+        return currentObject.id? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData) : postFormData(`${api.post}/${pathName}`, formData);
       }
-      return postData(`${api.post}/${pathName}`, data);
+      return  currentObject.id? updateData(`${api.update}/${pathName}`, currentObject.id, data) : postData(`${api.post}/${pathName}`, data);
     },
     onSuccess: () => {
       reset();
-      showSnackbar(currentObject ? 'Update success!' : 'Create success!');
+      showSnackbar(currentObject.id ?'Update success!' : 'Create success!');
       setTimeout(() => {
         router.push(`${paths.dashboard.view.list}/${pathName}`);
       }, 3000);
@@ -176,7 +156,7 @@ export default function ProjectForm({ pathName }: Props) {
                 <RHFTextField name="name" label="Enter Project name" />
                 <RHFTextField name="technology" label="Enter Technology" />
                 <RHFTextField name="rate" label="Enter Rate" type="number" />
-                <RHFTextField name="projectLink" label="Enter Project Link" />
+                <RHFTextField name="repository" label="Enter repository URL" />
                 <RHFTextField name="colorCode" label="Enter Color Code" />
                 <Stack spacing={1.5}>
                   <Typography variant="body2">Image</Typography>
@@ -203,7 +183,7 @@ export default function ProjectForm({ pathName }: Props) {
               sx={{ flexGrow: 1, pl: 3 }}
             />
             <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
-              {!currentObject ? 'Create' : 'Save Changes'}
+              {!currentObject.id ?'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>
         </Grid>

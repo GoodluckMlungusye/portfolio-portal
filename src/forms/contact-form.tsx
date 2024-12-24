@@ -16,8 +16,9 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
 
-import { Contact, RowObject } from 'src/models/api';
+import { Contact } from 'src/models/api';
 import { postData } from 'src/services/postService';
+import { updateData } from 'src/services/updateService';
 import { useRowContext } from 'src/contexts/row-context';
 
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
@@ -32,29 +33,20 @@ export default function ContactForm({ pathName }: Props) {
 
   const router = useRouter();
   const { row } = useRowContext();
-  const currentObject: RowObject | null = row;
- 
+  const currentObject = useMemo(() => (row as Contact) || { medium: '', contactLink: '' }, [row]);
+  
   const NewContactSchema = Yup.object().shape({
     medium: Yup.string().required('Contact medium is required'),
     contactLink: Yup.string().required('Contact link is required'),
   });  
 
-  function isContact(obj: RowObject | null): obj is Contact {
-    return !!obj && 'medium' in obj && 'contactLink' in obj;
-  } 
-  
-  const defaultValues = useMemo(() => {
-    if (isContact(currentObject)) {
-      return {
-        medium: currentObject.medium || '',
-        contactLink: currentObject.contactLink || '',
-      };
-    }
-    return {
-      medium: '',
-      contactLink: '',
-    };
-  }, [currentObject]);
+  const defaultValues = useMemo(
+    () => ({
+      medium: currentObject?.medium || '',
+      contactLink: currentObject?.contactLink || '',
+    }),
+    [currentObject]
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewContactSchema),
@@ -76,10 +68,13 @@ export default function ContactForm({ pathName }: Props) {
   }, [currentObject, defaultValues, reset]);
 
   const { isPending, mutate } = useMutation({
-    mutationFn: (data: Contact) => postData(`${api.post}/${pathName}`, data),
+    mutationFn: (data: Contact) =>
+      currentObject.id
+        ? updateData(`${api.update}/${pathName}`, currentObject.id, data) 
+        : postData(`${api.post}/${pathName}`, data), 
     onSuccess: () => {
       reset();
-      showSnackbar(currentObject ? 'Update success!' : 'Create success!');
+      showSnackbar(currentObject.id ? 'Update success!' : 'Create success!');
       setTimeout(() => {
         router.push(`${paths.dashboard.view.list}/${pathName}`);
       }, 3000);
@@ -117,7 +112,7 @@ export default function ContactForm({ pathName }: Props) {
             }}
           >
             <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
-              {!currentObject ? 'Create' : 'Save Changes'}
+              {!currentObject.id ? 'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>
         </Grid>

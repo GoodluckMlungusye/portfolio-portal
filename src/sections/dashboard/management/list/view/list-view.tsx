@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -21,11 +22,14 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useSnackbar } from 'src/hooks/use-snack-bar';
 
+import { api } from 'src/utils/api';
 import { capitalize } from 'src/utils/capitalize';
 import { generateColumns } from 'src/utils/generate-columns';
 
 import { RowObject } from 'src/models/api';
+import { deleteData } from 'src/services/deleteService';
 import { useRowContext } from 'src/contexts/row-context';
 import { useDataContext } from 'src/contexts/data-context';
 
@@ -34,6 +38,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { TableNoData, TableSkeleton } from 'src/components/table';
+import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type Props = {
@@ -54,6 +59,9 @@ export default function ListView({ pathName }: Props) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [activeRow, setActiveRow] = React.useState<RowObject | null>(null);
 
+  const { snackbarOpen, snackbarMessage, snackbarSeverity, closeSnackbar, showSnackbar } =
+  useSnackbar();
+
   const startPaginationRows = page * rowsPerPage;
   const endPaginationRows = startPaginationRows + rowsPerPage;
 
@@ -65,6 +73,29 @@ export default function ListView({ pathName }: Props) {
     if (activeRow) {
       updateRow(activeRow); 
       navigate(`${paths.dashboard.create.new}/${pathName}`);
+    }
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: (id: number) => 
+      deleteData(`${api.delete}/${pathName}`, id),
+    onSuccess: () => {
+      showSnackbar('Delete success!');
+      window.location.reload();
+    },
+    onError: (error) => {
+      console.error('Error details:', error);
+      showSnackbar(error.message, 'error');
+    },
+  });
+
+  const onDelete = async (id: number) => {
+    mutate(id);
+  };
+
+  const handleDeleteRow = () => {
+    if (activeRow) {
+      onDelete(activeRow.id as number)
     }
   };
 
@@ -187,6 +218,7 @@ export default function ListView({ pathName }: Props) {
               href={`${paths.dashboard.create.new}/${pathName}`}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
+              onClick={() => updateRow({})}
             >
               {`New ${pathName}`}
             </Button>
@@ -270,10 +302,17 @@ export default function ListView({ pathName }: Props) {
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error">
+          <Button variant="contained" color="error" onClick={handleDeleteRow}>
             Delete
           </Button>
         }
+      />
+
+      <CustomSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={closeSnackbar}
       />
     </>
   );
