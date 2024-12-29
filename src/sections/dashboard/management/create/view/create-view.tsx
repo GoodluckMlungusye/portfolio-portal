@@ -1,10 +1,7 @@
 import { Button } from '@mui/material';
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-
-import { capitalize } from 'src/utils/capitalize';
 
 import SkillForm from 'src/forms/skill-form';
 import ContactForm from 'src/forms/contact-form';
@@ -15,7 +12,6 @@ import SubSkillForm from 'src/forms/sub-skill-form';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import ObjectForm from '../object-form';
 
@@ -59,25 +55,7 @@ export default function CreateView({ pathName }: Props) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading={`Create new ${pathName}`}
-        links={[
-          {
-            name: 'Dashboard',
-            href: paths.dashboard.root,
-          },
-          {
-            name: capitalize(pathName),
-          },
-          { name: 'Create' },
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
-     
       <ObjectForm>{renderForm()}</ObjectForm>
-      
     </Container>
   );
 }

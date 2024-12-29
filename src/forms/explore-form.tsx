@@ -16,12 +16,14 @@ import { useRouter } from 'src/routes/hooks';
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
+import { capitalize } from 'src/utils/capitalize';
 
 import { Explore } from 'src/models/api';
 import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
 import { updateData, updateFormData } from 'src/services/updateService';
 
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
@@ -33,7 +35,10 @@ type Props = {
 export default function ExploreForm({ pathName }: Props) {
   const router = useRouter();
   const { row } = useRowContext();
-  const currentObject = useMemo(() => (row as Explore) || { counts: 0, description: '', image: null }, [row]);
+  const currentObject = useMemo(
+    () => (row as Explore) || { counts: 0, description: '', image: null },
+    [row]
+  );
 
   const NewExploreSchema = Yup.object().shape({
     counts: Yup.number().moreThan(0, 'Counts must be at least 0'),
@@ -76,10 +81,14 @@ export default function ExploreForm({ pathName }: Props) {
         formData.append('description', data.description);
         formData.append('file', data.image);
 
-        return currentObject.id? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData) : postFormData(`${api.post}/${pathName}`, formData);
+        return currentObject.id
+          ? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData)
+          : postFormData(`${api.post}/${pathName}`, formData);
       }
 
-      return  currentObject.id? updateData(`${api.update}/${pathName}`, currentObject.id, data) : postData(`${api.post}/${pathName}`, data);
+      return currentObject.id
+        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
+        : postData(`${api.post}/${pathName}`, data);
     },
     onSuccess: () => {
       reset();
@@ -129,6 +138,22 @@ export default function ExploreForm({ pathName }: Props) {
 
   return (
     <>
+      <CustomBreadcrumbs
+        heading={currentObject.id? `Update current ${pathName}`: `Create new ${pathName}`}
+        links={[
+          {
+            name: 'Dashboard',
+            href: paths.dashboard.root,
+          },
+          {
+            name: capitalize(pathName),
+          },
+          { name: currentObject.id? 'Update': 'Create' },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Grid container spacing={3}>
           <Grid xs={12}>

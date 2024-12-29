@@ -18,12 +18,14 @@ import { useRouter } from 'src/routes/hooks';
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
+import { capitalize } from 'src/utils/capitalize';
 
 import { Project } from 'src/models/api';
 import { useRowContext } from 'src/contexts/row-context';
 import { postData, postFormData } from 'src/services/postService';
 import { updateData, updateFormData } from 'src/services/updateService';
 
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
@@ -32,11 +34,21 @@ type Props = {
 };
 
 export default function ProjectForm({ pathName }: Props) {
-
   const router = useRouter();
   const { row } = useRowContext();
-  const currentObject = useMemo(() => (row as Project) || 
-  { name: '', technology: '', rate: 1, repository: '', colorCode: '', image: null, isHosted: false }, [row]);
+  const currentObject = useMemo(
+    () =>
+      (row as Project) || {
+        name: '',
+        technology: '',
+        rate: 1,
+        repository: '',
+        colorCode: '',
+        image: null,
+        isHosted: false,
+      },
+    [row]
+  );
 
   const NewProjectSchema = Yup.object().shape({
     name: Yup.string().required('Project name is required'),
@@ -49,7 +61,6 @@ export default function ProjectForm({ pathName }: Props) {
     image: Yup.mixed().nullable().notRequired(),
     isHosted: Yup.boolean().required('Hosted status is required'),
   });
-
 
   const defaultValues = useMemo(
     () => ({
@@ -64,18 +75,12 @@ export default function ProjectForm({ pathName }: Props) {
     [currentObject]
   );
 
-
   const methods = useForm({
     resolver: yupResolver(NewProjectSchema),
     defaultValues,
   });
 
-  const {
-    reset,
-    watch,
-    setValue,
-    handleSubmit
-  } = methods;
+  const { reset, watch, setValue, handleSubmit } = methods;
   const values = watch();
 
   const { snackbarOpen, snackbarMessage, snackbarSeverity, closeSnackbar, showSnackbar } =
@@ -99,13 +104,17 @@ export default function ProjectForm({ pathName }: Props) {
         formData.append('isHosted', data.isHosted.toString());
         formData.append('file', data.image);
 
-        return currentObject.id? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData) : postFormData(`${api.post}/${pathName}`, formData);
+        return currentObject.id
+          ? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData)
+          : postFormData(`${api.post}/${pathName}`, formData);
       }
-      return  currentObject.id? updateData(`${api.update}/${pathName}`, currentObject.id, data) : postData(`${api.post}/${pathName}`, data);
+      return currentObject.id
+        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
+        : postData(`${api.post}/${pathName}`, data);
     },
     onSuccess: () => {
       reset();
-      showSnackbar(currentObject.id ?'Update success!' : 'Create success!');
+      showSnackbar(currentObject.id ? 'Update success!' : 'Create success!');
       setTimeout(() => {
         router.push(`${paths.dashboard.view.list}/${pathName}`);
       }, 3000);
@@ -148,6 +157,22 @@ export default function ProjectForm({ pathName }: Props) {
 
   return (
     <>
+      <CustomBreadcrumbs
+        heading={currentObject.id? `Update current ${pathName}`: `Create new ${pathName}`}
+        links={[
+          {
+            name: 'Dashboard',
+            href: paths.dashboard.root,
+          },
+          {
+            name: capitalize(pathName),
+          },
+          { name: currentObject.id? 'Update': 'Create' },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Grid container spacing={3}>
           <Grid xs={12}>
@@ -183,7 +208,7 @@ export default function ProjectForm({ pathName }: Props) {
               sx={{ flexGrow: 1, pl: 3 }}
             />
             <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
-              {!currentObject.id ?'Create' : 'Save Changes'}
+              {!currentObject.id ? 'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>
         </Grid>

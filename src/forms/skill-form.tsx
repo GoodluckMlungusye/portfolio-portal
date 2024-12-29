@@ -15,24 +15,29 @@ import { useRouter } from 'src/routes/hooks';
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { api } from 'src/utils/api';
+import { capitalize } from 'src/utils/capitalize';
 
 import { Skill } from 'src/models/api';
 import { postData } from 'src/services/postService';
+import { updateData } from 'src/services/updateService';
+import { useRowContext } from 'src/contexts/row-context';
 
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 type Props = {
-  currentObject?: Skill;
   pathName: string;
 };
 
-export default function SkillForm({ currentObject, pathName }: Props) {
+export default function SkillForm({ pathName }: Props) {
   const router = useRouter();
+  const { row } = useRowContext();
+  const currentObject = useMemo(() => (row as Skill) || { name: '' }, [row]);
 
   const NewSkillSchema = Yup.object().shape({
-    name: Yup.string().required('Skill name is required')
+    name: Yup.string().required('Skill name is required'),
   });
 
   const defaultValues = useMemo(
@@ -47,10 +52,7 @@ export default function SkillForm({ currentObject, pathName }: Props) {
     defaultValues,
   });
 
-  const {
-    reset,
-    handleSubmit
-  } = methods;
+  const { reset, handleSubmit } = methods;
 
   const { snackbarOpen, snackbarMessage, snackbarSeverity, closeSnackbar, showSnackbar } =
     useSnackbar();
@@ -62,10 +64,13 @@ export default function SkillForm({ currentObject, pathName }: Props) {
   }, [currentObject, defaultValues, reset]);
 
   const { isPending, mutate } = useMutation({
-    mutationFn: (data: Skill) => postData(`${api.post}/${pathName}`, data),
+    mutationFn: (data: Skill) =>
+      currentObject.id
+        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
+        : postData(`${api.post}/${pathName}`, data),
     onSuccess: () => {
       reset();
-      showSnackbar(currentObject ? 'Update success!' : 'Create success!');
+      showSnackbar(currentObject.id ? 'Update success!' : 'Create success!');
       setTimeout(() => {
         router.push(`${paths.dashboard.view.list}/${pathName}`);
       }, 3000);
@@ -82,6 +87,22 @@ export default function SkillForm({ currentObject, pathName }: Props) {
 
   return (
     <>
+      <CustomBreadcrumbs
+        heading={currentObject.id ? `Update current ${pathName}` : `Create new ${pathName}`}
+        links={[
+          {
+            name: 'Dashboard',
+            href: paths.dashboard.root,
+          },
+          {
+            name: capitalize(pathName),
+          },
+          { name: currentObject.id ? 'Update' : 'Create' },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Grid container spacing={3}>
           <Grid xs={12}>
@@ -102,7 +123,7 @@ export default function SkillForm({ currentObject, pathName }: Props) {
             }}
           >
             <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
-              {!currentObject ? 'Create' : 'Save Changes'}
+              {!currentObject.id ? 'Create' : 'Save Changes'}
             </LoadingButton>
           </Grid>
         </Grid>

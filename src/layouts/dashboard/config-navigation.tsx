@@ -53,8 +53,8 @@ export function useNavData() {
   });
 
   const navigationItems = useMemo(() => data, [data]);
-  const filteredItems = useMemo(() => ['home', 'about', 'skills', 'subskills'], []);
-  const filteredCreateItems = useMemo(() => ['home', 'about', 'clients'], []);
+  const filteredItems = useMemo(() => ['home', 'about', 'subskills'], []);
+  const filteredCreateItems = useMemo(() => ['home', 'about', 'clients', 'skills'], []);
 
   const listItems = useMemo(
     () =>

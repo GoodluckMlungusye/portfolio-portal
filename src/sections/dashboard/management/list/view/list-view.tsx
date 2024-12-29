@@ -60,7 +60,7 @@ export default function ListView({ pathName }: Props) {
   const [activeRow, setActiveRow] = React.useState<RowObject | null>(null);
 
   const { snackbarOpen, snackbarMessage, snackbarSeverity, closeSnackbar, showSnackbar } =
-  useSnackbar();
+    useSnackbar();
 
   const startPaginationRows = page * rowsPerPage;
   const endPaginationRows = startPaginationRows + rowsPerPage;
@@ -71,14 +71,13 @@ export default function ListView({ pathName }: Props) {
 
   const handleEditRow = () => {
     if (activeRow) {
-      updateRow(activeRow); 
+      updateRow(activeRow);
       navigate(`${paths.dashboard.create.new}/${pathName}`);
     }
   };
 
   const { mutate } = useMutation({
-    mutationFn: (id: number) => 
-      deleteData(`${api.delete}/${pathName}`, id),
+    mutationFn: (id: number) => deleteData(`${api.delete}/${pathName}`, id),
     onSuccess: () => {
       showSnackbar('Delete success!');
       window.location.reload();
@@ -95,15 +94,15 @@ export default function ListView({ pathName }: Props) {
 
   const handleDeleteRow = () => {
     if (activeRow) {
-      onDelete(activeRow.id as number)
+      onDelete(activeRow.id as number);
     }
   };
 
   const getRow = (event: React.MouseEvent<HTMLElement>, row: RowObject) => {
-    setActiveRow(row); 
+    setActiveRow(row);
     popover.onOpen(event);
   };
-  
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -201,7 +200,6 @@ export default function ListView({ pathName }: Props) {
       <TableNoData notFound={notFound} />
     );
 
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -213,15 +211,17 @@ export default function ListView({ pathName }: Props) {
             { name: 'List' },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={`${paths.dashboard.create.new}/${pathName}`}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-              onClick={() => updateRow({})}
-            >
-              {`New ${pathName}`}
-            </Button>
+            pathName !== 'clients' && (
+              <Button
+                component={RouterLink}
+                href={`${paths.dashboard.create.new}/${pathName}`}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                onClick={() => updateRow({})}
+              >
+                {`New ${pathName}`}
+              </Button>
+            )
           }
           sx={{
             mb: { xs: 3, md: 5 },

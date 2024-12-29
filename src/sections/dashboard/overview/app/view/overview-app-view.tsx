@@ -1,30 +1,58 @@
-import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Unstable_Grid2";
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Unstable_Grid2';
 
-import { useMockedUser } from "src/hooks/use-mocked-user";
+import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useDashboardData } from 'src/hooks/use-dashboard-data';
 
-import { SeoIllustration } from "src/assets/illustrations";
+import { transformToDynamicSkillSeries } from 'src/utils/transform-skill-format';
 
-import { useSettingsContext } from "src/components/settings";
+import { SeoIllustration } from 'src/assets/illustrations';
 
-import AppWelcome from "../app-welcome";
-import AppAreaVisual from "../app-area-visual";
-import AppWidgetSummary from "../app-widget-summary";
-import AppCurrentDownload from "../app-current-download";
+import { useSettingsContext } from 'src/components/settings';
+
+import { SkillSet } from 'src/types/skill';
+
+import AppWelcome from '../app-welcome';
+import AppAreaVisual from '../app-area-visual';
+import AppWidgetSummary from '../app-widget-summary';
+import AppCurrentDownload from '../app-current-download';
 
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
   const { user } = useMockedUser();
-
-  const theme = useTheme();
+  const { data: projects } = useDashboardData('projects');
+  const { data: clients } = useDashboardData('clients');
+  const { data: skills } = useDashboardData('skills');
 
   const settings = useSettingsContext();
 
+  const skillSeries =
+    skills && skills.length > 0
+      ? skills.map((skill: SkillSet) => ({
+          label: skill.name,
+          value: skill.subSkillList.length,
+        }))
+      : [];
+
+  const subSkills =
+    skills && skills.length > 0
+      ? [
+          '',
+          ...skills.flatMap((skill: SkillSet) =>
+            skill.subSkillList.map((subskill) => subskill.name)
+          ),
+          '',
+        ]
+      : ['', ''];
+
+  const totalSkills = subSkills.length - 2;
+  const seriesLength = subSkills.length;
+  const dynamicSkillSeries = transformToDynamicSkillSeries(skills, seriesLength, subSkills);
+
   return (
-    <Container maxWidth={settings.themeStretch ? false : "xl"}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
         <Grid xs={12}>
           <AppWelcome
@@ -40,50 +68,22 @@ export default function OverviewAppView() {
         </Grid>
 
         <Grid xs={12} md={4}>
-          <AppWidgetSummary
-            title="Total Projects"
-            percent={2.6}
-            total={18765}
-            chart={{
-              series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
-            }}
-          />
+          <AppWidgetSummary title="Total Projects" total={(projects && projects.length) || 0} pathName="projects"/>
         </Grid>
 
         <Grid xs={12} md={4}>
-          <AppWidgetSummary
-            title="Total Clients"
-            percent={0.2}
-            total={4876}
-            chart={{
-              colors: [theme.palette.info.light, theme.palette.info.main],
-              series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
-            }}
-          />
+          <AppWidgetSummary title="Total Clients" total={(clients && clients.length) || 0} pathName="clients"/>
         </Grid>
 
         <Grid xs={12} md={4}>
-          <AppWidgetSummary
-            title="Total Skills"
-            percent={-0.1}
-            total={678}
-            chart={{
-              colors: [theme.palette.warning.light, theme.palette.warning.main],
-              series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-            }}
-          />
+          <AppWidgetSummary title="Total Skills" total={(skills && totalSkills) || 0} pathName="subskills"/>
         </Grid>
 
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentDownload
             title="Core Skills"
             chart={{
-              series: [
-                { label: "Frontend ", value: 2 },
-                { label: "Backend  ", value: 2 },
-                { label: "DBMS", value: 2 },
-                { label: "Miscellaneous", value: 3 },
-              ],
+              series: skillSeries,
             }}
           />
         </Grid>
@@ -92,79 +92,8 @@ export default function OverviewAppView() {
           <AppAreaVisual
             title="Skills"
             chart={{
-              categories: [
-                "",
-                "React",
-                "Flutter",
-                "Spring",
-                "Laravel",
-                "Postgres",
-                "MySQL",
-                "Docker",
-                "Scrum",
-                "Designing",
-                "",
-              ],
-              series: [
-                {
-                  year: "Frontend",
-                  data: [
-                    {
-                      name: "React",
-                      data: [0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    },
-                    {
-                      name: "Flutter",
-                      data: [0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0],
-                    },
-                  ],
-                },
-                {
-                  year: "Backend",
-                  data: [
-                    {
-                      name: "Spring",
-                      data: [0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0],
-                    },
-                    {
-                      name: "Laravel",
-                      data: [0, 0, 0, 0, 75, 0, 0, 0, 0, 0, 0],
-                    },
-                  ],
-                },
-
-                {
-                  year: "DBMS",
-                  data: [
-                    {
-                      name: "Postgres",
-                      data: [0, 0, 0, 0, 0, 85, 0, 0, 0, 0, 0],
-                    },
-                    {
-                      name: "MySQL",
-                      data: [0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 0],
-                    },
-                  ],
-                },
-
-                {
-                  year: "Miscellaneous",
-                  data: [
-                    {
-                      name: "Docker",
-                      data: [0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0],
-                    },
-                    {
-                      name: "Scrum",
-                      data: [0, 0, 0, 0, 0, 0, 0, 0, 95, 0, 0],
-                    },
-                    {
-                      name: "Designing",
-                      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0],
-                    },
-                  ],
-                },
-              ],
+              categories: subSkills,
+              series: dynamicSkillSeries,
             }}
           />
         </Grid>
