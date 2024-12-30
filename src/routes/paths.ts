@@ -22,12 +22,10 @@ export const paths = {
     view: {
       root: `${ROOTS.DASHBOARD}/view`,
       list: `${ROOTS.DASHBOARD}/view/list`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/view/${id}/edit`,
     },
     create: {
       root: `${ROOTS.DASHBOARD}/create`,
       new: `${ROOTS.DASHBOARD}/create/new`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/create/${id}/edit`,
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
