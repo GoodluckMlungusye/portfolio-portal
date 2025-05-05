@@ -87,8 +87,8 @@ export default function ExploreForm({ pathName }: Props) {
       }
 
       return currentObject.id
-        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
-        : postData(`${api.post}/${pathName}`, data);
+        ? updateData(`/${pathName}`, currentObject.id, data)
+        : postData(`/${pathName}`, data);
     },
     onSuccess: () => {
       reset();

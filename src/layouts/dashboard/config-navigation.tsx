@@ -3,8 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 
 import { paths } from 'src/routes/paths';
 
-import { api } from 'src/utils/api';
-
 import { useTranslate } from 'src/locales';
 import { getData } from 'src/services/getService';
 
@@ -49,7 +47,7 @@ export function useNavData() {
   const { t } = useTranslate();
   const { data } = useQuery({
     queryKey: ['links'],
-    queryFn: () => getData(`${api.get}/links`),
+    queryFn: () => getData("/links"),
   });
 
   const navigationItems = useMemo(() => data, [data]);

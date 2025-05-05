@@ -66,8 +66,8 @@ export default function SkillForm({ pathName }: Props) {
   const { isPending, mutate } = useMutation({
     mutationFn: (data: Skill) =>
       currentObject.id
-        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
-        : postData(`${api.post}/${pathName}`, data),
+        ? updateData(`/${pathName}`, currentObject.id, data)
+        : postData(`/${pathName}`, data),
     onSuccess: () => {
       reset();
       showSnackbar(currentObject.id ? 'Update success!' : 'Create success!');

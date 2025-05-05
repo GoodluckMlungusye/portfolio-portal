@@ -24,7 +24,6 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
-import { api } from 'src/utils/api';
 import { capitalize } from 'src/utils/capitalize';
 import { generateColumns } from 'src/utils/generate-columns';
 
@@ -77,7 +76,7 @@ export default function ListView({ pathName }: Props) {
   };
 
   const { mutate } = useMutation({
-    mutationFn: (id: number) => deleteData(`${api.delete}/${pathName}`, id),
+    mutationFn: (id: number) => deleteData(`/${pathName}`, id),
     onSuccess: () => {
       showSnackbar('Delete success!');
       window.location.reload();

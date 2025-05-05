@@ -43,7 +43,7 @@ export default function SubSkillForm({ pathName }: Props) {
 
   const { data: dropdownList } = useQuery({
     queryKey: ['skills'],
-    queryFn: () => getData(`${api.get}/skills`),
+    queryFn: () => getData('/skills'),
   });
 
   const NewSubSkillSchema = Yup.object().shape({
@@ -83,8 +83,8 @@ export default function SubSkillForm({ pathName }: Props) {
   const { isPending, mutate } = useMutation({
     mutationFn: (data: SubSkill) =>
       currentObject.id
-        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
-        : postData(`${api.post}/${pathName}`, data),
+        ? updateData(`/${pathName}`, currentObject.id, data)
+        : postData(`/${pathName}`, data),
     onSuccess: () => {
       reset();
       showSnackbar(currentObject.id ? 'Update success!' : 'Create success!');

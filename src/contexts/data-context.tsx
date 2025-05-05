@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React, {useMemo, ReactNode , useContext, createContext } from 'react';
 
-import { api } from 'src/utils/api';
-
 import { getData } from 'src/services/getService';
 
 interface DataContextType {
@@ -21,7 +19,7 @@ interface DataProviderProps {
 export const DataProvider: React.FC<DataProviderProps> = ({ children, endpoint }) => {
   const { isLoading, error, data } = useQuery({
     queryKey: [`${endpoint}`],
-    queryFn: () => getData(`${api.get}/${endpoint}`),
+    queryFn: () => getData(`/${endpoint}`),
   });
 
   const contextValue = useMemo(() => ({

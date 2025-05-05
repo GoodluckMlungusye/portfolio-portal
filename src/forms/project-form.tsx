@@ -109,8 +109,8 @@ export default function ProjectForm({ pathName }: Props) {
           : postFormData(`${api.post}/${pathName}`, formData);
       }
       return currentObject.id
-        ? updateData(`${api.update}/${pathName}`, currentObject.id, data)
-        : postData(`${api.post}/${pathName}`, data);
+        ? updateData(`/${pathName}`, currentObject.id, data)
+        : postData(`/${pathName}`, data);
     },
     onSuccess: () => {
       reset();

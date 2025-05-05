@@ -5,13 +5,4 @@ export const postData = async (endpoint: string, data: any) => {
   return response.data;
 };
 
-export const postFormData = async (endpoint: string, data: FormData) => {
-  const response = await axiosInstance.post(endpoint, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  });
-  return response.data;
-};
-
 

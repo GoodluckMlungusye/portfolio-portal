@@ -5,10 +5,7 @@ import { BASE_API_URL } from 'src/config-global';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  baseURL: BASE_API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
+  baseURL: BASE_API_URL
 });
 
 axiosInstance.interceptors.response.use(
