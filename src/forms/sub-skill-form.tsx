@@ -16,7 +16,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
-import { api } from 'src/utils/api';
 import { capitalize } from 'src/utils/capitalize';
 
 import { Skill, SubSkill } from 'src/models/api';

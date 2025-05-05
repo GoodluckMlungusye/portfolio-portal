@@ -14,7 +14,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
-import { api } from 'src/utils/api';
 import { capitalize } from 'src/utils/capitalize';
 
 import { Skill } from 'src/models/api';

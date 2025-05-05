@@ -17,13 +17,12 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
-import { api } from 'src/utils/api';
 import { capitalize } from 'src/utils/capitalize';
 
 import { Project } from 'src/models/api';
+import { postData } from 'src/services/postService';
+import { updateData } from 'src/services/updateService';
 import { useRowContext } from 'src/contexts/row-context';
-import { postData, postFormData } from 'src/services/postService';
-import { updateData, updateFormData } from 'src/services/updateService';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
@@ -94,23 +93,21 @@ export default function ProjectForm({ pathName }: Props) {
 
   const { isPending, mutate } = useMutation({
     mutationFn: async (data: Project) => {
-      if (data.image instanceof File) {
-        const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('technology', data.technology);
-        formData.append('rate', data.rate.toString());
-        formData.append('repository', data.repository);
-        formData.append('colorCode', data.colorCode);
-        formData.append('isHosted', data.isHosted.toString());
-        formData.append('file', data.image);
-
-        return currentObject.id
-          ? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData)
-          : postFormData(`${api.post}/${pathName}`, formData);
+      const formData = new FormData();
+      const project = {
+        'name': data.name,
+        'technology': data.technology,
+        'rate': data.rate,
+        'repository': data.repository,
+        'colorCode': data.colorCode,
+        'isHosted': data.isHosted
       }
+      formData.append('project', new Blob([JSON.stringify(project)], { type: 'application/json' }));
+      formData.append('file', data.image as File);
+
       return currentObject.id
-        ? updateData(`/${pathName}`, currentObject.id, data)
-        : postData(`/${pathName}`, data);
+      ? updateData(`/${pathName}`, currentObject.id, formData)
+      : postData(`/${pathName}`, formData);
     },
     onSuccess: () => {
       reset();

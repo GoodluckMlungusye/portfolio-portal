@@ -15,13 +15,12 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/hooks/use-snack-bar';
 
-import { api } from 'src/utils/api';
 import { capitalize } from 'src/utils/capitalize';
 
 import { Explore } from 'src/models/api';
+import { postData } from 'src/services/postService';
+import { updateData } from 'src/services/updateService';
 import { useRowContext } from 'src/contexts/row-context';
-import { postData, postFormData } from 'src/services/postService';
-import { updateData, updateFormData } from 'src/services/updateService';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
@@ -75,20 +74,17 @@ export default function ExploreForm({ pathName }: Props) {
 
   const { isPending, mutate } = useMutation({
     mutationFn: async (data: Explore) => {
-      if (data.image instanceof File) {
-        const formData = new FormData();
-        formData.append('counts', data.counts.toString());
-        formData.append('description', data.description);
-        formData.append('file', data.image);
-
-        return currentObject.id
-          ? updateFormData(`${api.update}/${pathName}`, currentObject.id, formData)
-          : postFormData(`${api.post}/${pathName}`, formData);
+      const formData = new FormData();
+      const explore = {
+        'counts': data.counts,
+        'description': data.description
       }
+      formData.append('explore', new Blob([JSON.stringify(explore)], { type: 'application/json' }));
+      formData.append('file', data.image as File);
 
       return currentObject.id
-        ? updateData(`/${pathName}`, currentObject.id, data)
-        : postData(`/${pathName}`, data);
+        ? updateData(`/${pathName}`, currentObject.id, formData)
+        : postData(`/${pathName}`, formData);
     },
     onSuccess: () => {
       reset();
