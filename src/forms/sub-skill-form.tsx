@@ -58,7 +58,7 @@ export default function SubSkillForm({ pathName }: Props) {
     () => ({
       name: currentObject?.name || '',
       percentageLevel: currentObject?.percentageLevel || 0,
-      skillId: currentObject?.skill?.id || 1,
+      skillId: currentObject?.skillId || 1,
     }),
     [currentObject]
   );
@@ -98,16 +98,7 @@ export default function SubSkillForm({ pathName }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const { skillId, ...otherData } = data;
-
-    const formattedData = {
-      ...otherData,
-      skill: {
-        id: skillId,
-      },
-    };
-
-    mutate(formattedData);
+    mutate(data);
   });
 
   return (
@@ -156,7 +147,13 @@ export default function SubSkillForm({ pathName }: Props) {
               pt: 2,
             }}
           >
-            <Button variant="outlined" component={RouterLink} href={`${paths.dashboard.create.new}/skills`} size="large" sx={{ mr: 2 }}>
+            <Button
+              variant="outlined"
+              component={RouterLink}
+              href={`${paths.dashboard.create.new}/skills`}
+              size="large"
+              sx={{ mr: 2 }}
+            >
               Add new skill
             </Button>
             <LoadingButton type="submit" variant="contained" size="large" loading={isPending}>
