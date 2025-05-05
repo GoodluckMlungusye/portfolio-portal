@@ -12,13 +12,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+// import { useAuthContext } from 'src/auth/hooks';
+// import { INITIAL_PATH } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -26,15 +26,15 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView() {
-  const { login } = useAuthContext();
+  // const { login } = useAuthContext();
 
   const router = useRouter();
 
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg] = useState('');
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const returnTo = searchParams.get('returnTo');
+  // const returnTo = searchParams.get('returnTo');
 
   const password = useBoolean();
 
@@ -54,22 +54,24 @@ export default function JwtLoginView() {
   });
 
   const {
-    reset,
-    handleSubmit,
+    // reset,
+    // handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      await login?.(data.email, data.password);
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     await login?.(data.email, data.password);
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
-    } catch (error) {
-      console.error(error);
-      reset();
-      setErrorMsg(typeof error === 'string' ? error : error.message);
-    }
-  });
+  //     router.push(returnTo || INITIAL_PATH);
+  //   } catch (error) {
+  //     console.error(error);
+  //     reset();
+  //     setErrorMsg(typeof error === 'string' ? error : error.message);
+  //   }
+  // });
+
+  const navigateToHome = () => router.push(paths.dashboard.root);
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
@@ -125,17 +127,13 @@ export default function JwtLoginView() {
     <>
       {renderHead}
 
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
-      </Alert>
-
       {!!errorMsg && (
         <Alert severity="error" sx={{ mb: 3 }}>
           {errorMsg}
         </Alert>
       )}
 
-      <FormProvider methods={methods} onSubmit={onSubmit}>
+      <FormProvider methods={methods} onSubmit={navigateToHome}>
         {renderForm}
       </FormProvider>
     </>

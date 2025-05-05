@@ -18,7 +18,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { INITIAL_PATH } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -67,7 +67,7 @@ export default function JwtRegisterView() {
     try {
       await register?.(data.email, data.password, data.firstName, data.lastName);
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      router.push(returnTo || INITIAL_PATH);
     } catch (error) {
       console.error(error);
       reset();
