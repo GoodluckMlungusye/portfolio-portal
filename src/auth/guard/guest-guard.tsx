@@ -1,11 +1,4 @@
-import { useEffect, useCallback } from 'react';
-
-import { paths } from 'src/routes/paths';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
-
 import { SplashScreen } from 'src/components/loading-screen';
-
-import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +7,7 @@ type Props = {
 };
 
 export default function GuestGuard({ children }: Props) {
-  const { loading } = useAuthContext();
+  const loading  = false
 
   return <>{loading ? <SplashScreen /> : <Container>{children}</Container>}</>;
 }
@@ -22,23 +15,8 @@ export default function GuestGuard({ children }: Props) {
 // ----------------------------------------------------------------------
 
 function Container({ children }: Props) {
-  const router = useRouter();
-
-  const searchParams = useSearchParams();
-
-  const returnTo = searchParams.get('returnTo') || paths.dashboard.root;
-
-  const { authenticated } = useAuthContext();
-
-  const check = useCallback(() => {
-    if (authenticated) {
-      router.replace(returnTo);
-    }
-  }, [authenticated, returnTo, router]);
-
-  useEffect(() => {
-    check();
-  }, [check]);
+  
+  // conditional logic goes
 
   return <>{children}</>;
 }

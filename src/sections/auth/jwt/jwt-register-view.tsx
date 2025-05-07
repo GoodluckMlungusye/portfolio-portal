@@ -17,7 +17,6 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { INITIAL_PATH } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
@@ -26,7 +25,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
-  const { register } = useAuthContext();
+  // const { register } = useAuthContext();
 
   const router = useRouter();
 
@@ -65,7 +64,7 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.(data.email, data.password, data.firstName, data.lastName);
+      // await register?.(data.email, data.password, data.firstName, data.lastName);
 
       router.push(returnTo || INITIAL_PATH);
     } catch (error) {
