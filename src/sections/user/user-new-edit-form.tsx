@@ -18,7 +18,7 @@ import { useRouter } from "src/routes/hooks";
 
 import { fData } from "src/utils/format-number";
 
-import { countries } from "src/assets/data";
+import { countries } from "src/assets/data/countries";
 
 import Label from "src/components/label";
 import { useSnackbar } from "src/components/snackbar";
