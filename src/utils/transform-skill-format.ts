@@ -1,4 +1,4 @@
-  import { SkillSet } from "src/types/skill";
+import { SkillSet } from 'src/types/api';
   
   export function transformToDynamicSkillSeries(
     skillSets: SkillSet[] = [], 

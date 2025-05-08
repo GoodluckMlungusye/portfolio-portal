@@ -16,7 +16,6 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 
 import { capitalize } from 'src/utils/capitalize';
 
-import { Contact } from 'src/models/api';
 import { postData } from 'src/services/postService';
 import { updateData } from 'src/services/updateService';
 import { useRowContext } from 'src/contexts/row-context';
@@ -24,6 +23,9 @@ import { useRowContext } from 'src/contexts/row-context';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+
+import { Contact } from 'src/types/api';
+
 
 // ----------------------------------------------------------------------
 type Props = {

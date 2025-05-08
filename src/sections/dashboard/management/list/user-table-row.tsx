@@ -6,11 +6,11 @@ import IconButton from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { IUserItem } from 'src/models/user';
-
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import { IUserItem } from 'src/types/user';
 
 
 // ----------------------------------------------------------------------

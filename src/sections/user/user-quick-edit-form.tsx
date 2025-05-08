@@ -13,12 +13,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import { IUserItem } from 'src/models/user';
 import { USER_STATUS_OPTIONS } from 'src/_mock';
 import { countries } from 'src/assets/data/countries';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+
+import { IUserItem } from 'src/types/user';
 
 
 // ----------------------------------------------------------------------

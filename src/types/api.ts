@@ -43,8 +43,14 @@ export type SubSkill = {
   id?: number;
   name: string;
   percentageLevel: number;
-  skillId: number;
+  skillId?: number;
 };
+
+export type SkillSet = {
+  id: number;
+  name: string;
+  subSkillList: SubSkill[];
+}
 
 export type RowObject = Record<string,unknown>;
 

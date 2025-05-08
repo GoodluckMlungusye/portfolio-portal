@@ -11,7 +11,7 @@ import { SeoIllustration } from 'src/assets/illustrations';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { SkillSet } from 'src/types/skill';
+import { SkillSet } from 'src/types/api';
 
 import AppWelcome from '../app-welcome';
 import AppAreaVisual from '../app-area-visual';

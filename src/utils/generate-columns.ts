@@ -1,4 +1,4 @@
-import { Column } from "src/models/table";
+import { Column } from "src/types/table";
 
 import { capitalize } from "./capitalize";
 

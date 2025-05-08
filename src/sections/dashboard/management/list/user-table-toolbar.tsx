@@ -6,10 +6,10 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { IUserTableFilters, IUserTableFilterValue } from 'src/models/user';
-
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
 // ----------------------------------------------------------------------
 

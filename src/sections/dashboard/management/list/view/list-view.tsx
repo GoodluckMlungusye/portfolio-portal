@@ -27,7 +27,6 @@ import { useSnackbar } from 'src/hooks/use-snack-bar';
 import { capitalize } from 'src/utils/capitalize';
 import { generateColumns } from 'src/utils/generate-columns';
 
-import { RowObject } from 'src/models/api';
 import { deleteData } from 'src/services/deleteService';
 import { useRowContext } from 'src/contexts/row-context';
 import { useDataContext } from 'src/contexts/data-context';
@@ -39,6 +38,8 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { TableNoData, TableSkeleton } from 'src/components/table';
 import CustomSnackbar from 'src/components/snackbar/custom-snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import { RowObject } from 'src/types/api';
 
 type Props = {
   pathName: string;
