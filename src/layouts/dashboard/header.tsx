@@ -8,6 +8,7 @@ import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
+import { SECURITY_ENABLED } from 'src/config-global';
 
 import Logo from 'src/components/logo';
 import SvgColor from 'src/components/svg-color';
@@ -24,9 +25,12 @@ type Props = {
 };
 
 export default function Header({ onOpenNav }: Props) {
+
   const theme = useTheme();
 
   const settings = useSettingsContext();
+
+  const shouldShowAccountPopover = SECURITY_ENABLED === 'true';
 
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
@@ -57,7 +61,8 @@ export default function Header({ onOpenNav }: Props) {
       >
         <SettingsButton />
 
-        <AccountPopover />
+        {shouldShowAccountPopover && <AccountPopover />}
+
       </Stack>
     </>
   );

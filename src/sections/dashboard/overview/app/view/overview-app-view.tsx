@@ -25,6 +25,7 @@ export default function OverviewAppView() {
   const { data: projects } = useDashboardData('projects');
   const { data: clients } = useDashboardData('clients');
   const { data: skills } = useDashboardData('skills');
+  const isAuthenticated: boolean = false; 
 
   const settings = useSettingsContext();
 
@@ -56,7 +57,7 @@ export default function OverviewAppView() {
       <Grid container spacing={3}>
         <Grid xs={12}>
           <AppWelcome
-            title={`Welcome back 👋 \n ${user?.displayName}`}
+            title={`Welcome back 👋 ${isAuthenticated && user?.displayName ? `\n${user.displayName}` : ''}`}
             description="Keep track of your dashboard and update your database for any new updates."
             img={<SeoIllustration />}
             action={
