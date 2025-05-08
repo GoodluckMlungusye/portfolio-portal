@@ -6,9 +6,9 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Stack, { StackProps } from '@mui/material/Stack';
 
-import Iconify from 'src/components/iconify';
+import { IUserTableFilters, IUserTableFilterValue } from 'src/models/user';
 
-import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

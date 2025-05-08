@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 
-import { IUserCard } from 'src/types/user';
+import { IUserCard } from 'src/models/user';
 
 import UserCard from './user-card';
 

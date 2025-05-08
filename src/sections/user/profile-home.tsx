@@ -6,10 +6,9 @@ import Grid from "@mui/material/Unstable_Grid2";
 import CardHeader from "@mui/material/CardHeader";
 
 import { _socials } from "src/_mock";
+import { IUserProfile, IUserProfilePost } from "src/models/user";
 
 import Iconify from "src/components/iconify";
-
-import { IUserProfile, IUserProfilePost } from "src/types/user";
 
 // ----------------------------------------------------------------------
 

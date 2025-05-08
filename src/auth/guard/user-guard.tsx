@@ -6,8 +6,8 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function AuthGuard({ children }: Props) {
-  const  loading  = false
+export default function UserGuard({ children }: Props) {
+  const loading  = false
 
   return <>{loading ? <SplashScreen /> : <Container>{children}</Container>}</>;
 }
@@ -15,7 +15,8 @@ export default function AuthGuard({ children }: Props) {
 // ----------------------------------------------------------------------
 
 function Container({ children }: Props) {
-  // conditional logic goes here
   
+  // conditional logic goes
+
   return <>{children}</>;
 }

@@ -5,8 +5,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import { bgGradient } from 'src/theme/css';
+import { IUserProfileCover } from 'src/models/user';
 
-import { IUserProfileCover } from 'src/types/user';
 
 // ----------------------------------------------------------------------
 
