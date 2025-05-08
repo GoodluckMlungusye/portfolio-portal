@@ -13,7 +13,7 @@ import SubSkillForm from 'src/forms/sub-skill-form';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import ObjectForm from '../object-form';
+import ObjectForm from './object-form';
 
 // ----------------------------------------------------------------------
 

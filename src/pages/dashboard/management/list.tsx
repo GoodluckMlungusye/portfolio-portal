@@ -4,7 +4,7 @@ import { useParams } from "src/routes/hooks";
 
 import { DataProvider } from "src/contexts/data-context";
 
-import { ListView } from "src/sections/dashboard/management/list/view";
+import  ListView  from "src/sections/dashboard/management/list/list-view";
 
 
 // ----------------------------------------------------------------------

@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 
 import { useParams } from "src/routes/hooks";
 
-import { CreateView } from "src/sections/dashboard/management/create";
+import CreateView from "src/sections/dashboard/management/create/create-view";
 
 // ----------------------------------------------------------------------
 
