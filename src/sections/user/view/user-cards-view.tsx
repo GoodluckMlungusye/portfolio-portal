@@ -29,7 +29,7 @@ export default function UserCardsView() {
         action={
           <Button
             component={RouterLink}
-            href={paths.dashboard.user.new}
+            href=""
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >

@@ -15,8 +15,6 @@ const ListPage = lazy(() => import("src/pages/dashboard/management/list"));
 // USER
 const UserProfilePage = lazy(() => import("src/pages/user/profile"));
 const UserCardsPage = lazy(() => import("src/pages/user/cards"));
-const UserCreatePage = lazy(() => import("src/pages/user/new"));
-const UserEditPage = lazy(() => import("src/pages/user/edit"));
 
 // ----------------------------------------------------------------------
 
@@ -50,8 +48,6 @@ export const dashboardRoutes = [
           { element: <UserProfilePage />, index: true },
           { path: "profile", element: <UserProfilePage /> },
           { path: "cards", element: <UserCardsPage /> },
-          { path: "new", element: <UserCreatePage /> },
-          { path: ":id/edit", element: <UserEditPage /> },
         ],
       },
     ],
