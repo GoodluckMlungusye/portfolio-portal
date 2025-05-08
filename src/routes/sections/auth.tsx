@@ -8,8 +8,8 @@ import { SplashScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // JWT
-const JwtLoginPage = lazy(() => import('src/pages/auth/jwt/login'));
-const JwtRegisterPage = lazy(() => import('src/pages/auth/jwt/register'));
+const JwtLoginPage = lazy(() => import('src/pages/auth/login'));
+const JwtRegisterPage = lazy(() => import('src/pages/auth/register'));
 
 // ----------------------------------------------------------------------
 
