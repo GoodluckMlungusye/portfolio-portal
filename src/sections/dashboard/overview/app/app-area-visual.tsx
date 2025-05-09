@@ -20,7 +20,7 @@ interface Props extends CardProps {
     categories?: string[];
     colors?: string[];
     series: {
-      year: string;
+      skill: string;
       data: {
         name: string;
         data: number[];
@@ -96,8 +96,8 @@ export default function AppAreaVisual({
         />
 
         {series.map((item) => (
-          <Box key={item.year} sx={{ mt: 3, mx: 3 }}>
-            {item.year === seriesData && (
+          <Box key={item.skill} sx={{ mt: 3, mx: 3 }}>
+            {item.skill === seriesData && (
               <Chart
                 dir="ltr"
                 type="area"
@@ -118,11 +118,11 @@ export default function AppAreaVisual({
       >
         {series.map((option) => (
           <MenuItem
-            key={option.year}
-            selected={option.year === seriesData}
-            onClick={() => handleChangeSeries(option.year)}
+            key={option.skill}
+            selected={option.skill === seriesData}
+            onClick={() => handleChangeSeries(option.skill)}
           >
-            {option.year}
+            {option.skill}
           </MenuItem>
         ))}
       </CustomPopover>
